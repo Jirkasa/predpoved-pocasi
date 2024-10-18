@@ -6,7 +6,8 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 module.exports = {
     entry: {
         main: "./src/ts/main.ts",
-        style: "./src/less/main.less"
+        style: "./src/less/main.less",
+        icons: './src/icons/main.js',
     },
     output: {
         clean: true
