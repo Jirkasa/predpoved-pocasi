@@ -1,8 +1,8 @@
-import CurrentWeatherData from "./data/CurrentWeatherData";
+import WeatherData from "./data/WeatherData";
 import WeatherDataLoader from "./data/WeatherDataLoader";
 import DataLoadingManager from "./DataLoadingManager";
 
-class CurrentWeatherLoadingManager extends DataLoadingManager<CurrentWeatherData> {
+class ForecastWeatherLoadingManager extends DataLoadingManager<WeatherData[]> {
     private weatherDataLoader: WeatherDataLoader;
     private latitude: number;
     private longitude: number;
@@ -16,9 +16,9 @@ class CurrentWeatherLoadingManager extends DataLoadingManager<CurrentWeatherData
         this.language = language;
     }
 
-    protected async getData(abortSignal: AbortSignal): Promise<CurrentWeatherData> {
-        return await this.weatherDataLoader.loadCurrentWeatherData(this.latitude, this.longitude, this.language, abortSignal);
+    protected async getData(abortSignal: AbortSignal): Promise<WeatherData[]> {
+        return await this.weatherDataLoader.loadForecastWeatherData(this.latitude, this.longitude, this.language, abortSignal);
     }
 }
 
-export default CurrentWeatherLoadingManager;
+export default ForecastWeatherLoadingManager;
