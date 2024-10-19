@@ -5,6 +5,7 @@ import WeatherDataLoader from "../core/data/WeatherDataLoader";
 class OpenWeatherMapDataLoader implements WeatherDataLoader {
     private static readonly CURRENT_WEATHER_ENDPOINT = "https://api.openweathermap.org/data/2.5/weather";
     private static readonly FORECAST_WEATHER_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
+    private static readonly ICONS_URL = "https://openweathermap.org/img/wn/";
     private static readonly UNITS = "metric";
 
     private appId : string;
@@ -50,6 +51,11 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
         if (data === null) throw new Error("Forecast weather data could not be loaded.");
         
         return data;
+    }
+
+    public getIconURLByIconIdentifier(iconIdentifier: string, large: boolean = false): string {
+        const sizeValue = large ? "4x" : "2x";
+        return `${OpenWeatherMapDataLoader.ICONS_URL}${iconIdentifier}@${sizeValue}.png`;
     }
 
     private getCurrentWeatherDataFromJson(json: any): CurrentWeatherData | null {

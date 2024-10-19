@@ -8,6 +8,8 @@ async function test() {
     const data = await weatherDataLoader.loadCurrentWeatherData(49.68128712714686, 17.04514591890507);
     console.log(data);
 
+    console.log(weatherDataLoader.getIconURLByIconIdentifier(data.iconIdentifier));
+
     const forecastData = await weatherDataLoader.loadForecastWeatherData(49.68128712714686, 17.04514591890507);
     console.log("-------");
     console.log(forecastData);
