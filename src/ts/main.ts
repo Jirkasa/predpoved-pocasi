@@ -23,4 +23,7 @@ async function testLocationSearch() {
 }
 
 // test();
-testLocationSearch();
+// testLocationSearch();
+
+// tak teď jak to bude s tím jazykem?
+    // asi bude lepší mít nějaké podporované jazyky než podporovat všechny - tím budu mít možnost přeložit celou aplikaci

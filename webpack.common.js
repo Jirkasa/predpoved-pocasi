@@ -1,4 +1,5 @@
 const path = require("path");
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
@@ -60,6 +61,15 @@ module.exports = {
             filename: "index.html",
             chunks: ["style", "main"],
             inject: true
+        }),
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "src", "static").replace(/\\/g, "/"),
+                    to: path.resolve(__dirname, "dist", "static"),
+                    noErrorOnMissing: true
+                }
+            ]
         }),
         new SpriteLoaderPlugin(),
         new RemoveEmptyScriptsPlugin()

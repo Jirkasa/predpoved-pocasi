@@ -8,11 +8,24 @@
 <body>
     <div class="page">
         <div class="page__content">
-            <div class="location u-mb-2">
-                <svg>
-                    <use xlink:href="./static/icon-sprite.svg#location"></use>
-                </svg>
-                <span>Litovel</span>
+            <div class="weather-app-top-bar u-mb-2">
+                <div class="location">
+                    <svg>
+                        <use xlink:href="./static/icon-sprite.svg#location"></use>
+                    </svg>
+                    <span>Litovel</span>
+                </div>
+                <div class="language-select">
+                    <button class="language-select__button">
+                        <img src="./static/img/flags/czech.svg" alt="" class="language-select__button-flag">
+                        Čeština
+                        <div class="language-select__dropdown-icon">
+                            <svg>
+                                <use xlink:href="./static/icon-sprite.svg#dropdown"></use>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
             </div>
             <div class="weather-app-layout">
                 <div class="weather-app-layout__current-weather-side">

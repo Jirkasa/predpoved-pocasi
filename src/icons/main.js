@@ -1,5 +1,6 @@
 import "./air.svg";
 import "./arrow-up.svg";
+import "./dropdown.svg";
 import "./humidity.svg";
 import "./location.svg";
 import "./night.svg";
