@@ -16,7 +16,7 @@ weatherApp.addOnCurrentWeatherLoadingStartedListener(() => {
     console.log("loading started");
 });
 
-weatherApp.loadCurrentWeather();
+// weatherApp.loadCurrentWeather();
 
 /*async function test() {
     const data = await weatherDataLoader.loadCurrentWeatherData(49.68128712714686, 17.04514591890507, "cz");
