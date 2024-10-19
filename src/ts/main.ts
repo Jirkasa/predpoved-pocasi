@@ -7,12 +7,12 @@ const weatherDataLoader = new OpenWeatherMapDataLoader(OPEN_WEATHER_MAP_APP_ID);
 const locationSearch = new OpenWeatherMapLocationSearch(OPEN_WEATHER_MAP_APP_ID);
 
 async function test() {
-    const data = await weatherDataLoader.loadCurrentWeatherData(49.68128712714686, 17.04514591890507);
+    const data = await weatherDataLoader.loadCurrentWeatherData(49.68128712714686, 17.04514591890507, "cz");
     console.log(data);
 
     console.log(weatherDataLoader.getIconURLByIconIdentifier(data.iconIdentifier));
 
-    const forecastData = await weatherDataLoader.loadForecastWeatherData(49.68128712714686, 17.04514591890507);
+    const forecastData = await weatherDataLoader.loadForecastWeatherData(49.68128712714686, 17.04514591890507, "cz");
     console.log("-------");
     console.log(forecastData);
 }
@@ -22,7 +22,7 @@ async function testLocationSearch() {
     console.log(locations);
 }
 
-// test();
+test();
 // testLocationSearch();
 
 // tak teď jak to bude s tím jazykem?
