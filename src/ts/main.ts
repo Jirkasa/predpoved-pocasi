@@ -15,4 +15,4 @@ async function test() {
     console.log(forecastData);
 }
 
-test();
+// test();
