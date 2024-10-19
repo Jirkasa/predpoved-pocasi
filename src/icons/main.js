@@ -4,6 +4,7 @@ import "./dropdown.svg";
 import "./humidity.svg";
 import "./location.svg";
 import "./night.svg";
+import "./progress.svg";
 import "./rain.svg";
 import "./search.svg";
 import "./temperature.svg";
