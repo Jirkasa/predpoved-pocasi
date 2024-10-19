@@ -14,7 +14,7 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
         this.appId = appId;
     }
 
-    public async loadCurrentWeatherData(latitude: number, longitude: number, language: string): Promise<CurrentWeatherData> {
+    public async loadCurrentWeatherData(latitude: number, longitude: number, language: string, abortSignal: AbortSignal): Promise<CurrentWeatherData> {
         const queryParams = new URLSearchParams({
             appid: this.appId,
             lat: latitude.toString(),
@@ -23,7 +23,9 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
             lang: language
         });
 
-        const response = await fetch(`${OpenWeatherMapDataLoader.CURRENT_WEATHER_ENDPOINT}?${queryParams.toString()}`);
+        const response = await fetch(`${OpenWeatherMapDataLoader.CURRENT_WEATHER_ENDPOINT}?${queryParams.toString()}`, {
+            signal: abortSignal
+        });
         if (!response.ok) throw new Error("Current weather data could not be loaded.");
 
         const json = await response.json();
@@ -34,7 +36,7 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
         return data;
     }
 
-    public async loadForecastWeatherData(latitude: number, longitude: number, language: string): Promise<WeatherData[]> {
+    public async loadForecastWeatherData(latitude: number, longitude: number, language: string, abortSignal: AbortSignal): Promise<WeatherData[]> {
         const queryParams = new URLSearchParams({
             appid: this.appId,
             lat: latitude.toString(),
@@ -42,7 +44,9 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
             units: OpenWeatherMapDataLoader.UNITS,
             lang: language
         });
-        const response = await fetch(`${OpenWeatherMapDataLoader.FORECAST_WEATHER_ENDPOINT}?${queryParams.toString()}`);
+        const response = await fetch(`${OpenWeatherMapDataLoader.FORECAST_WEATHER_ENDPOINT}?${queryParams.toString()}`, {
+            signal: abortSignal
+        });
         if (!response.ok) throw new Error("Forecast weather data could not be loaded.");
 
         const json = await response.json();

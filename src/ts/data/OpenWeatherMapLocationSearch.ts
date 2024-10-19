@@ -11,14 +11,16 @@ class OpenWeatherMapLocationSearch implements LocationSearch {
         this.appId = appId;
     }
 
-    public async search(search: string): Promise<LocationData[]> {
+    public async search(search: string, abortSignal: AbortSignal): Promise<LocationData[]> {
         const queryParams = new URLSearchParams({
             appId: this.appId,
             limit: OpenWeatherMapLocationSearch.LOCATIONS_LIMIT.toString(),
             q: search
         });
 
-        const response = await fetch(`${OpenWeatherMapLocationSearch.ENDPOINT}?${queryParams.toString()}`);
+        const response = await fetch(`${OpenWeatherMapLocationSearch.ENDPOINT}?${queryParams.toString()}`, {
+            signal: abortSignal
+        });
         if (!response.ok) throw new Error("Locations could not be loaded.");
 
         const json = await response.json();
