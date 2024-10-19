@@ -1,8 +1,10 @@
-import OpenWeatherMapDataLoader from "./data-loader/OpenWeatherMapDataLoader";
+import OpenWeatherMapDataLoader from "./data/OpenWeatherMapDataLoader";
+import OpenWeatherMapLocationSearch from "./data/OpenWeatherMapLocationSearch";
 
 const OPEN_WEATHER_MAP_APP_ID = "610f182df978d44c879ed39ce0f7f9a9";
 
 const weatherDataLoader = new OpenWeatherMapDataLoader(OPEN_WEATHER_MAP_APP_ID);
+const locationSearch = new OpenWeatherMapLocationSearch(OPEN_WEATHER_MAP_APP_ID);
 
 async function test() {
     const data = await weatherDataLoader.loadCurrentWeatherData(49.68128712714686, 17.04514591890507);
@@ -15,4 +17,10 @@ async function test() {
     console.log(forecastData);
 }
 
+async function testLocationSearch() {
+    const locations = await locationSearch.search("olomouc");
+    console.log(locations);
+}
+
 // test();
+testLocationSearch();
