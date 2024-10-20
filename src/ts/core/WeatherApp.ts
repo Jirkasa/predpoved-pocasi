@@ -18,6 +18,21 @@ class WeatherApp {
         this.locationSearchManager = new LocationSearchManager(locationSearch);
     }
 
+    public setLatitude(latitude: number): void {
+        this.currentWeatherLoadingManager.setLatitude(latitude);
+        this.forecastWeatherLoadingManager.setLatitude(latitude);
+    }
+
+    public setLongitude(longitude: number): void {
+        this.currentWeatherLoadingManager.setLongitude(longitude);
+        this.forecastWeatherLoadingManager.setLongitude(longitude);
+    }
+
+    public setLanguage(language: string): void {
+        this.currentWeatherLoadingManager.setLanguage(language);
+        this.forecastWeatherLoadingManager.setLanguage(language);
+    }
+
     public async loadCurrentWeather(): Promise<undefined> {
         this.currentWeatherLoadingManager.loadData();
     }
@@ -69,15 +84,3 @@ class WeatherApp {
 }
 
 export default WeatherApp;
-
-/*
-
-
-Takže o co se to bude starat?
-- o načítání aktuálního počasí a předpovědi
-    - zbytek už by mělo být na gui, jak si to zpracuje a zobrazí
-- bude si to držet nastavený jazyk, město...
-    - gui může reagovat na tyto změny
-
-
-*/

@@ -3,7 +3,7 @@ import LanguageInfo from "../localization/LanguageInfo";
 import LanguageManager from "../localization/LanguageManager";
 import LanguageSelect from "./components/language-select/LanguageSelect";
 import LanguageUpdater from "./components/language-updater/LanguageUpdater";
-import LocationSearchBar from "./components/search-bar/LocationSearchBar";
+import LocationSearchBar from "./components/location-search-bar/LocationSearchBar";
 import PagesToggle from "./PagesToggle";
 
 type WeatherAppUIConfig = {

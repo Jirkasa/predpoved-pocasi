@@ -2,6 +2,7 @@ import LocationData from "../../../core/data/LocationData";
 import WeatherApp from "../../../core/WeatherApp";
 import LanguageInfo from "../../../localization/LanguageInfo";
 import LanguageManager from "../../../localization/LanguageManager";
+import LocalizationHelper from "../../../localization/utils/LocalizationHelper";
 import ElementToggle from "../../utils/ElementToggle";
 import LocationSearchBarResultsToggle from "./LocationSearchBarResultsToggle";
 
@@ -15,6 +16,7 @@ class LocationSearchBar {
     private resultsContainerToggle: ElementToggle;
     private resultsContentToggle: LocationSearchBarResultsToggle;
     private weatherApp: WeatherApp;
+    private languageManager: LanguageManager;
 
     private searchTimoutId: number | null = null;
 
@@ -31,6 +33,7 @@ class LocationSearchBar {
             languageManager
         );
         this.weatherApp = weatherApp;
+        this.languageManager = languageManager;
 
         this.input.addEventListener("input", () => this.onInputChange());
         this.input.addEventListener("focus", () => this.onInputFocus());
@@ -57,9 +60,16 @@ class LocationSearchBar {
         for (let location of data) {
             const locationButton = document.createElement("button");
             locationButton.classList.add(LocationSearchBar.LOCATION_BUTTON_CSS_CLASS);
-            locationButton.innerText = location.name; // todo - potom vzít local name
+            locationButton.innerText = this.getLocationName(location);
             this.itemsContainer.appendChild(locationButton);
         }
+    }
+
+    private getLocationName(location: LocationData): string {
+        const locale = LocalizationHelper.getLocale(this.languageManager.getCurrentLanguage());
+
+        const localeName = location.localNames.get(locale);
+        return localeName || location.name;
     }
 
     private onSearchLoadingError(): void {
@@ -97,8 +107,12 @@ class LocationSearchBar {
     }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {
-        // todo
         this.input.setAttribute("placeholder", languageInfo.localizedData.searchForLocation);
+
+        const searchText = this.input.value.trim();
+        if (searchText.length > 0) {
+            this.weatherApp.searchForLocation(searchText);
+        }
     }
 }
 
