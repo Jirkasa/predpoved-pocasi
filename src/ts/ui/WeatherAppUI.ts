@@ -3,6 +3,7 @@ import LanguageInfo from "../localization/LanguageInfo";
 import LanguageManager from "../localization/LanguageManager";
 import LanguageSelect from "./components/language-select/LanguageSelect";
 import LanguageUpdater from "./components/language-updater/LanguageUpdater";
+import LocationNameDisplay from "./components/location-name-display/LocationNameDisplay";
 import LocationSearchBar from "./components/location-search-bar/LocationSearchBar";
 import PagesToggle from "./PagesToggle";
 
@@ -26,6 +27,7 @@ type WeatherAppUIConfig = {
     currentWeatherFeelsLikeLabelId: string;
     currentWeatherHumidityLabelId: string;
     currentWeatherWindLabelId: string;
+    currentLocationNameId: string;
 }
 
 class WeatherAppUI {
@@ -38,6 +40,12 @@ class WeatherAppUI {
         this.pagesToggle = new PagesToggle(
             this.getElementById(config.loadingPageId),
             this.getElementById(config.weatherAppPageId)
+        );
+
+        new LocationNameDisplay(
+            this.getElementById(config.currentLocationNameId),
+            config.weatherApp,
+            config.languageManager
         );
 
         const languageSelectButtonFlagImage = this.getElementById(config.languageSelectButtonFlagImageId);

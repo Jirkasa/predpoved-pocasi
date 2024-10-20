@@ -16,11 +16,8 @@ class ForecastWeatherLoadingManager extends DataLoadingManager<WeatherData[]> {
         this.language = language;
     }
 
-    public setLatitude(latitude: number): void {
+    public setCoordinates(latitude: number, longitude: number): void {
         this.latitude = latitude;
-    }
-
-    public setLongitude(longitude: number): void {
         this.longitude = longitude;
     }
 

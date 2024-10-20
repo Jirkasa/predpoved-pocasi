@@ -5,27 +5,45 @@ import LocationSearch from "./data/LocationSearch";
 import WeatherData from "./data/WeatherData";
 import WeatherDataLoader from "./data/WeatherDataLoader";
 import ForecastWeatherLoadingManager from "./ForecastWeatherLoadingManager";
+import LocationSearchByCoordinatesManager from "./LocationSearchByCoordinatesManager";
 import LocationSearchManager from "./LocationSearchManager";
+import EventSourcePoint from "./utils/EventSourcePoint";
 
 class WeatherApp {
     private currentWeatherLoadingManager: CurrentWeatherLoadingManager;
     private forecastWeatherLoadingManager: ForecastWeatherLoadingManager;
     private locationSearchManager: LocationSearchManager;
+    private onLocationChangeEventSource = new EventSourcePoint<undefined>();
+
+    private currentLocation: LocationData | null = null;
 
     constructor(weatherDataLoader: WeatherDataLoader, locationSearch: LocationSearch, latitude: number, longitude: number, language: string) {
         this.currentWeatherLoadingManager = new CurrentWeatherLoadingManager(weatherDataLoader, latitude, longitude, language);
         this.forecastWeatherLoadingManager = new ForecastWeatherLoadingManager(weatherDataLoader, latitude, longitude, language);
         this.locationSearchManager = new LocationSearchManager(locationSearch);
+        
+        const locationSearchByCoordinatesManager = new LocationSearchByCoordinatesManager(locationSearch);
+        locationSearchByCoordinatesManager.addOnDataLoadedListener(location => this.onLocationSearchByCoordinatesLoaded(location));
+        locationSearchByCoordinatesManager.setCoordinates(latitude, longitude);
+        locationSearchByCoordinatesManager.loadData();
     }
 
-    public setLatitude(latitude: number): void {
-        this.currentWeatherLoadingManager.setLatitude(latitude);
-        this.forecastWeatherLoadingManager.setLatitude(latitude);
+    public getCurrentLocationName(locale: string | null = null): string {
+        if (!this.currentLocation) return "";
+
+        if (locale) {
+            const localeName = this.currentLocation.localNames.get(locale);
+            if (localeName) return localeName;
+        }
+        return this.currentLocation.name;
     }
 
-    public setLongitude(longitude: number): void {
-        this.currentWeatherLoadingManager.setLongitude(longitude);
-        this.forecastWeatherLoadingManager.setLongitude(longitude);
+    public setLocation(location: LocationData): void {
+        if (location === this.currentLocation) return;
+        this.currentWeatherLoadingManager.setCoordinates(location.latitude, location.longitude);
+        this.forecastWeatherLoadingManager.setCoordinates(location.latitude, location.longitude);
+        this.currentLocation = location;
+        this.onLocationChangeEventSource.fire(undefined);
     }
 
     public setLanguage(language: string): void {
@@ -80,6 +98,18 @@ class WeatherApp {
 
     public addOnLocationSearchLoadingErrorListener(callback: () => void): void {
         this.locationSearchManager.addOnLoadingErrorListener(callback);
+    }
+
+    public addOnLocationChangeListener(callback: () => void): void {
+        this.onLocationChangeEventSource.subscribe(callback);
+    }
+
+    private onLocationSearchByCoordinatesLoaded(location: LocationData | null) {
+        if (this.currentLocation) return;
+        this.currentLocation = location;
+        if (location) {
+            this.onLocationChangeEventSource.fire(undefined);
+        }
     }
 }
 
