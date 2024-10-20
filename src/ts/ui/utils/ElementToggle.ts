@@ -6,7 +6,7 @@ export type ElementToggleConfig = {
     closeOnClickOutside?: boolean;
 }
 
-class ElementToggle { // todo - ještě nastavovat tabindex
+class ElementToggle {
     private targetElement: HTMLElement;
     private openedCSSClass: string;
     private buttonElement: HTMLElement | null;
@@ -34,7 +34,10 @@ class ElementToggle { // todo - ještě nastavovat tabindex
             document.addEventListener("click", event => this.onPageClick(event));
         }
 
-        this.close();
+        const buttons = this.targetElement.querySelectorAll("button,a");
+        buttons.forEach(button => {
+            button.setAttribute("tabindex", "-1");
+        });
     }
 
     public isOpened(): boolean {
@@ -48,6 +51,12 @@ class ElementToggle { // todo - ještě nastavovat tabindex
         if (this.buttonElement && this.buttonOpenedCSSClass) {
             this.buttonElement.classList.add(this.buttonOpenedCSSClass);
         }
+
+        const buttons = this.targetElement.querySelectorAll("button,a");
+        buttons.forEach(button => {
+            button.setAttribute("tabindex", "0");
+        });
+
         this.opened = true;
     }
 
@@ -58,6 +67,12 @@ class ElementToggle { // todo - ještě nastavovat tabindex
         if (this.buttonElement && this.buttonOpenedCSSClass) {
             this.buttonElement.classList.remove(this.buttonOpenedCSSClass);
         }
+
+        const buttons = this.targetElement.querySelectorAll("button,a");
+        buttons.forEach(button => {
+            button.setAttribute("tabindex", "-1");
+        });
+
         this.opened = false;
     }
 

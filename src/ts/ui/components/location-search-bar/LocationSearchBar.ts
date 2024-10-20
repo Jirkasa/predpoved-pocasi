@@ -9,7 +9,7 @@ import LocationSearchBarResultsToggle from "./LocationSearchBarResultsToggle";
 class LocationSearchBar {
     private static readonly RESULTS_CONTAINER_CSS_OPENED_MODIFIER = "search-bar__results--opened";
     private static readonly LOCATION_BUTTON_CSS_CLASS = "search-bar__item";
-    private static readonly SEARCH_DELAY = 500;
+    private static readonly SEARCH_DELAY = 300;
 
     private input: HTMLInputElement;
     private itemsContainer: HTMLElement;
@@ -37,7 +37,7 @@ class LocationSearchBar {
 
         this.input.addEventListener("input", () => this.onInputChange());
         this.input.addEventListener("focus", () => this.onInputFocus());
-        this.input.addEventListener("focusout", () => this.onInputFocusOut()); // todo - ale potom při výběru pomocí tabu zjišťovat, jestli uživatel nepřešel na položku v results listu
+        document.addEventListener("click", event => this.onPageClick(event));
         weatherApp.addOnLocationSearchLoadingStartedListener(() => this.onSearchLoadingStarted());
         weatherApp.addOnLocationSearchLoadedListener(data => this.onSearchResultsLoaded(data));
         weatherApp.addOnLocationSearchLoadingErrorListener(() => this.onSearchLoadingError());
@@ -61,6 +61,10 @@ class LocationSearchBar {
             const locationButton = document.createElement("button");
             locationButton.classList.add(LocationSearchBar.LOCATION_BUTTON_CSS_CLASS);
             locationButton.innerText = this.getLocationName(location);
+            locationButton.addEventListener("click", () => this.onLocationButtonClick(location));
+            if (!this.resultsContainerToggle.isOpened()) {
+                locationButton.setAttribute("tabindex", "-1");
+            }
             this.itemsContainer.appendChild(locationButton);
         }
     }
@@ -102,7 +106,14 @@ class LocationSearchBar {
         }
     }
 
-    private onInputFocusOut(): void {
+    private onPageClick(event: MouseEvent): void {
+        if (event.target === this.input) return;
+        this.resultsContainerToggle.close();
+    }
+
+    private onLocationButtonClick(location: LocationData): void {
+        this.weatherApp.setLocation(location);
+        this.input.value = "";
         this.resultsContainerToggle.close();
     }
 
