@@ -1,0 +1,9 @@
+{
+    "currentWeather": "Aktuální počasí",
+    "forecast": "Předpověď",
+    "feelsLike": "Pocitová teplota",
+    "humidity": "Vlhkost",
+    "wind": "Vítr",
+    "temperature": "Teplota",
+    "precipitation": "Srážky"
+}

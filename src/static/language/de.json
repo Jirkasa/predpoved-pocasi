@@ -1,0 +1,9 @@
+{
+    "currentWeather": "Aktuelles Wetter",
+    "forecast": "Vorhersage",
+    "feelsLike": "Gefühlt",
+    "humidity": "Luftfeuchtigkeit",
+    "wind": "Wind",
+    "temperature": "Temperatur",
+    "precipitation": "Niederschlag"
+}

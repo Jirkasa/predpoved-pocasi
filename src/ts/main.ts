@@ -1,6 +1,9 @@
 import WeatherApp from "./core/WeatherApp";
 import OpenWeatherMapDataLoader from "./data/OpenWeatherMapDataLoader";
 import OpenWeatherMapLocationSearch from "./data/OpenWeatherMapLocationSearch";
+import AppLanguage from "./localization/AppLanguage";
+import JSONLanguageDataLoader from "./localization/data/JSONLanguageDataLoader";
+import LanguageManager from "./localization/LanguageManager";
 import ElementToggle from "./ui/ElementToggle";
 import LocationSearchBar from "./ui/LocationSearchBar";
 
@@ -31,3 +34,13 @@ new LocationSearchBar(
     document.getElementById("LocationSearchBarResults") as HTMLElement,
     weatherApp
 );
+
+const languageDataLoader = new JSONLanguageDataLoader();
+
+const languageManager = new LanguageManager(languageDataLoader);
+
+languageManager.addOnLanguageChangeListener(languageInfo => {
+    console.log(languageInfo);
+});
+
+languageManager.changeLanguage(AppLanguage.CZECH);

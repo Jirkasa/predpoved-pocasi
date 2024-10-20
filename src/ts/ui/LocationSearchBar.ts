@@ -91,3 +91,5 @@ class LocationSearchBar {
 }
 
 export default LocationSearchBar;
+
+// todo - vytvořit složku components a tam umisťovat tady ty věci

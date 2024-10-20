@@ -1,0 +1,9 @@
+{
+    "currentWeather": "Current weather",
+    "forecast": "Forecast",
+    "feelsLike": "Feels like",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "temperature": "Temperature",
+    "precipitation": "Precipitation"
+}

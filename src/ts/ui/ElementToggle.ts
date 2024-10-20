@@ -6,7 +6,7 @@ type ElementToggleConfig = {
     closeOnClickOutside?: boolean;
 }
 
-class ElementToggle { // todo - ještě nastavovat z-index
+class ElementToggle { // todo - ještě nastavovat tabindex
     private targetElement: HTMLElement;
     private openedCSSClass: string;
     private buttonElement: HTMLElement | null;
@@ -76,3 +76,5 @@ class ElementToggle { // todo - ještě nastavovat z-index
 }
 
 export default ElementToggle;
+
+// todo - asi přesunout do utils
