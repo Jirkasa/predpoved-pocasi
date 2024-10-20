@@ -15,9 +15,12 @@ class WeatherWebApp {
     private languageManager: LanguageManager;
 
     constructor() {
+        const language = this.getDefaultLanguage();
+        const coordinates = this.getDefaultCoordinatesByLanguage(language);
+
         const weatherDataLoader = new OpenWeatherMapDataLoader(WeatherWebApp.OPEN_WEATHER_MAP_APP_ID);
         const locationSearch = new OpenWeatherMapLocationSearch(WeatherWebApp.OPEN_WEATHER_MAP_APP_ID);
-        this.weatherApp = new WeatherApp(weatherDataLoader, locationSearch, 51.5073219, -0.1276474, "en");
+        this.weatherApp = new WeatherApp(weatherDataLoader, locationSearch, coordinates[0], coordinates[1], LocalizationHelper.getLocale(language, true));
 
         const languageDataLoader = new JSONLanguageDataLoader();
         this.languageManager = new LanguageManager(languageDataLoader);
@@ -47,12 +50,39 @@ class WeatherWebApp {
 
         this.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
 
-        this.languageManager.changeLanguage(AppLanguage.CZECH);
+        this.languageManager.changeLanguage(language);
     }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {
         let language = LocalizationHelper.getLocale(languageInfo.language, true);
         this.weatherApp.setLanguage(language);
+    }
+
+    private getDefaultCoordinatesByLanguage(language: AppLanguage): [number, number] {
+        switch (language) {
+            case AppLanguage.ENGLISH:
+                return [51.5073219, -0.1276474];
+            case AppLanguage.CZECH:
+                return [50.0596288, 14.446459273258009];
+            case AppLanguage.SLOVAK:
+                return [48.1435149, 17.108279];
+            case AppLanguage.GERMAN:
+                return [52.5170365, 13.3888599];
+        }
+    }
+
+    private getDefaultLanguage(): AppLanguage {
+        let browserLanguage = navigator.language.split('-')[0];
+        switch (browserLanguage) {
+            case "cs":
+                return AppLanguage.CZECH;
+            case "sk":
+                return AppLanguage.SLOVAK;
+            case "de":
+                return AppLanguage.GERMAN;
+            default:
+                return AppLanguage.ENGLISH;
+        }
     }
 }
 
