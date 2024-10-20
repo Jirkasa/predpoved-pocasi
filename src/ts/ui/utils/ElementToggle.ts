@@ -1,4 +1,4 @@
-type ElementToggleConfig = {
+export type ElementToggleConfig = {
     targetElement: HTMLElement;
     openedCSSClass: string;
     buttonElement?: HTMLElement;
@@ -76,5 +76,3 @@ class ElementToggle { // todo - ještě nastavovat tabindex
 }
 
 export default ElementToggle;
-
-// todo - asi přesunout do utils

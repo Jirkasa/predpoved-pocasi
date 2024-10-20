@@ -1,4 +1,4 @@
-import SVGIconElementCreator from "./utils/SVGIconElementCreator";
+import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 
 class LocationSearchBarResultsToggle {
     private static readonly LOADING_ICON_CSS_CLASS = "search-bar__loading-icon";

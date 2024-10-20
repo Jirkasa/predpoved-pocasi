@@ -24,6 +24,10 @@ class LanguageManager {
         this.languageLoadingManager.loadData();
     }
 
+    public getCurrentLanguage(): AppLanguage {
+        return this.currentLanguage;
+    }
+
     public addOnLanguageLoadingStartedListener(callback: () => void): void {
         this.languageLoadingManager.addOnLoadingStartedListener(callback);
     }

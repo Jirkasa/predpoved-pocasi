@@ -1,6 +1,6 @@
-import LocationData from "../core/data/LocationData";
-import WeatherApp from "../core/WeatherApp";
-import ElementToggle from "./ElementToggle";
+import LocationData from "../../../core/data/LocationData";
+import WeatherApp from "../../../core/WeatherApp";
+import ElementToggle from "../../utils/ElementToggle";
 import LocationSearchBarResultsToggle from "./LocationSearchBarResultsToggle";
 
 class LocationSearchBar {

@@ -6,7 +6,16 @@
     <title>Předpověď počasí</title>
 </head>
 <body>
-    <div class="page">
+    <div id="LoadingPage" class="page">
+        <div class="page__content">
+            <div class="loading-spinner loading-spinner--large">
+                <svg>
+                    <use xlink:href="./static/icon-sprite.svg#progress"></use>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div id="WeatherAppPage" style="display: none;" class="page">
         <div class="page__content">
             <div class="weather-app-top-bar u-mb-2">
                 <div class="location">
@@ -17,8 +26,8 @@
                 </div>
                 <div class="language-select">
                     <button id="LanguageSelectButton" class="language-select__button">
-                        <img src="./static/img/flags/czechia.svg" alt="" class="language-select__button-flag">
-                        Čeština
+                        <img id="LanguageSelectButtonFlagImage" src="./static/img/flags/czechia.svg" alt="" class="language-select__button-flag">
+                        <span id="LanguageSelectButtonText"></span>
                         <div class="language-select__dropdown-icon">
                             <svg>
                                 <use xlink:href="./static/icon-sprite.svg#dropdown"></use>
@@ -26,19 +35,19 @@
                         </div>
                     </button>
                     <div id="LanguageSelectItems" class="language-select__items">
-                        <button class="language-select__item">
+                        <button id="LanguageSelectEnglishButton" class="language-select__item">
                             <img src="./static/img/flags/united-states.svg" alt="" class="language-select__item-flag">
                             <span>English</span>
                         </button>
-                        <button class="language-select__item">
+                        <button id="LanguageSelectCzechButton" class="language-select__item">
                             <img src="./static/img/flags/czechia.svg" alt="" class="language-select__item-flag">
                             <span>Česky</span>
                         </button>
-                        <button class="language-select__item">
+                        <button id="LanguageSelectSlovakButton" class="language-select__item">
                             <img src="./static/img/flags/slovakia.svg" alt="" class="language-select__item-flag">
                             <span>Slovensky</span>
                         </button>
-                        <button class="language-select__item">
+                        <button id="LanguageSelectGermanButton" class="language-select__item">
                             <img src="./static/img/flags/germany.svg" alt="" class="language-select__item-flag">
                             <span>Deutsch</span>
                         </button>
