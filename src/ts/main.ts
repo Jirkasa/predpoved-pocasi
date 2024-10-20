@@ -29,7 +29,12 @@ new WeatherAppUI({
     languageSelectSlovakButtonId: "LanguageSelectSlovakButton",
     languageSelectGermanButtonId: "LanguageSelectGermanButton",
     locationSearchBarInputId: "LocationSearchBarInput",
-    locationSearchBarResultsContainerId: "LocationSearchBarResults"
+    locationSearchBarResultsContainerId: "LocationSearchBarResults",
+    currentWeatherHeadingId: "CurrentWeatherHeading",
+    forecastHeadingId: "ForecastHeading",
+    currentWeatherFeelsLikeLabelId: "CurrentWeatherFeelsLikeLabel",
+    currentWeatherHumidityLabelId: "CurrentWeatherHumidityLabel",
+    currentWeatherWindLabelId: "CurrentWeatherWindLabel"
 });
 
 languageManager.changeLanguage(AppLanguage.CZECH);

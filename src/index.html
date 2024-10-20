@@ -66,7 +66,7 @@
                         <div id="LocationSearchBarResults" class="search-bar__results"></div>
                     </div>
                     <div class="tile">
-                        <h2 class="u-mb-3">Aktuální počasí</h2>
+                        <h2 id="CurrentWeatherHeading" class="u-mb-3">Aktuální počasí</h2>
                         <div class="weather-display u-mb-4">
                             <div class="weather-display__icon">
                                 <div class="weather-icon weather-icon--large">
@@ -80,25 +80,25 @@
                             <svg>
                                 <use xlink:href="./static/icon-sprite.svg#temperature"></use>
                             </svg>
-                            <span>Pocitová teplota: 12°C</span>
+                            <span><span id="CurrentWeatherFeelsLikeLabel">Pocitová teplota</span>: 12°C</span>
                         </p>
                         <p class="info-row u-mb-2">
                             <svg>
                                 <use xlink:href="./static/icon-sprite.svg#humidity"></use>
                             </svg>
-                            <span>Vlhkost: 43%</span>
+                            <span><span id="CurrentWeatherHumidityLabel">Vlhkost</span>: 43%</span>
                         </p>
                         <p class="info-row">
                             <svg>
                                 <use xlink:href="./static/icon-sprite.svg#air"></use>
                             </svg>
-                            <span>Vítr: 21 km/h</span>
+                            <span><span id="CurrentWeatherWindLabel">Vítr</span>: 21 km/h</span>
                         </p>
                     </div>
                 </div>
                 <div class="weather-app-layout__forecast-side">
                     <div class="tile">
-                        <h2 class="u-mb-3">Předpověď</h2>
+                        <h2 id="ForecastHeading" class="u-mb-3">Předpověď</h2>
                         <div class="navigation u-mb-3">
                             <div class="navigation__item">
                                 <button class="navigation__button navigation__button--active">Teplota</button>

@@ -5,5 +5,8 @@
     "humidity": "Humidity",
     "wind": "Wind",
     "temperature": "Temperature",
-    "precipitation": "Precipitation"
+    "precipitation": "Precipitation",
+    "searchForLocation": "Search for location",
+    "noResultsForLocationSearch": "No location found for the entered text.",
+    "locationSearchError": "An error occurred while loading locations."
 }

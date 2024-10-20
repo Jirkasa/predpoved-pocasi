@@ -2,6 +2,7 @@ import WeatherApp from "../core/WeatherApp";
 import LanguageInfo from "../localization/LanguageInfo";
 import LanguageManager from "../localization/LanguageManager";
 import LanguageSelect from "./components/language-select/LanguageSelect";
+import LanguageUpdater from "./components/language-updater/LanguageUpdater";
 import LocationSearchBar from "./components/search-bar/LocationSearchBar";
 import PagesToggle from "./PagesToggle";
 
@@ -20,6 +21,11 @@ type WeatherAppUIConfig = {
     languageSelectGermanButtonId: string;
     locationSearchBarInputId: string;
     locationSearchBarResultsContainerId: string;
+    currentWeatherHeadingId: string;
+    forecastHeadingId: string;
+    currentWeatherFeelsLikeLabelId: string;
+    currentWeatherHumidityLabelId: string;
+    currentWeatherWindLabelId: string;
 }
 
 class WeatherAppUI {
@@ -59,7 +65,19 @@ class WeatherAppUI {
         new LocationSearchBar(
             locationSearchBarInput,
             this.getElementById(config.locationSearchBarResultsContainerId),
-            config.weatherApp
+            config.weatherApp,
+            config.languageManager
+        );
+
+        new LanguageUpdater(
+            config.languageManager,
+            {
+                currentWeatherHeading: this.getElementById(config.currentWeatherHeadingId),
+                forecastHeading: this.getElementById(config.forecastHeadingId),
+                currentWeatherFeelsLikeLabel: this.getElementById(config.currentWeatherFeelsLikeLabelId),
+                currentWeatherHumidityLabel: this.getElementById(config.currentWeatherHumidityLabelId),
+                currentWeatherWindLabel: this.getElementById(config.currentWeatherWindLabelId)
+            }
         );
 
         config.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));

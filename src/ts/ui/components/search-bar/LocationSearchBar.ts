@@ -1,5 +1,7 @@
 import LocationData from "../../../core/data/LocationData";
 import WeatherApp from "../../../core/WeatherApp";
+import LanguageInfo from "../../../localization/LanguageInfo";
+import LanguageManager from "../../../localization/LanguageManager";
 import ElementToggle from "../../utils/ElementToggle";
 import LocationSearchBarResultsToggle from "./LocationSearchBarResultsToggle";
 
@@ -16,14 +18,18 @@ class LocationSearchBar {
 
     private searchTimoutId: number | null = null;
 
-    constructor(input: HTMLInputElement, resultsContainer: HTMLElement, weatherApp: WeatherApp) {
+    constructor(input: HTMLInputElement, resultsContainer: HTMLElement, weatherApp: WeatherApp, languageManager: LanguageManager) {
         this.input = input;
         this.itemsContainer = document.createElement("div");
         this.resultsContainerToggle = new ElementToggle({
             targetElement: resultsContainer,
             openedCSSClass: LocationSearchBar.RESULTS_CONTAINER_CSS_OPENED_MODIFIER
         });
-        this.resultsContentToggle = new LocationSearchBarResultsToggle(resultsContainer, this.itemsContainer);
+        this.resultsContentToggle = new LocationSearchBarResultsToggle(
+            resultsContainer,
+            this.itemsContainer,
+            languageManager
+        );
         this.weatherApp = weatherApp;
 
         this.input.addEventListener("input", () => this.onInputChange());
@@ -32,6 +38,7 @@ class LocationSearchBar {
         weatherApp.addOnLocationSearchLoadingStartedListener(() => this.onSearchLoadingStarted());
         weatherApp.addOnLocationSearchLoadedListener(data => this.onSearchResultsLoaded(data));
         weatherApp.addOnLocationSearchLoadingErrorListener(() => this.onSearchLoadingError());
+        languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
     }
 
     private onSearchLoadingStarted(): void {
@@ -88,8 +95,11 @@ class LocationSearchBar {
     private onInputFocusOut(): void {
         this.resultsContainerToggle.close();
     }
+
+    private onLanguageChange(languageInfo: LanguageInfo): void {
+        // todo
+        this.input.setAttribute("placeholder", languageInfo.localizedData.searchForLocation);
+    }
 }
 
 export default LocationSearchBar;
-
-// todo - vytvořit složku components a tam umisťovat tady ty věci

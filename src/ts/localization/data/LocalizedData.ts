@@ -6,6 +6,9 @@ type LocalizedData = {
     wind: string;
     temperature: string;
     precipitation: string;
+    searchForLocation: string;
+    noResultsForLocationSearch: string;
+    locationSearchError: string;
 }
 
 export default LocalizedData;

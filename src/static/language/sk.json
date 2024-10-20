@@ -5,5 +5,8 @@
     "humidity": "Vlhkosť",
     "wind": "Vietor",
     "temperature": "Teplota",
-    "precipitation": "Zrážky"
+    "precipitation": "Zrážky",
+    "searchForLocation": "Vyhľadať lokalitu",
+    "noResultsForLocationSearch": "Pre zadaný text nebola nájdená žiadna lokalita.",
+    "locationSearchError": "Pri načítavaní lokalít došlo bohužiaľ k chybe."
 }

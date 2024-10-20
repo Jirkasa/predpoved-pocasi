@@ -1,3 +1,5 @@
+import LanguageInfo from "../../../localization/LanguageInfo";
+import LanguageManager from "../../../localization/LanguageManager";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
 
 class LocationSearchBarResultsToggle {
@@ -14,7 +16,7 @@ class LocationSearchBarResultsToggle {
 
     private currentlyDisplayedElement: HTMLElement | null = null;
 
-    constructor(container: HTMLElement, itemsContainer: HTMLElement) {
+    constructor(container: HTMLElement, itemsContainer: HTMLElement, languageManager: LanguageManager) {
         this.container = container;
 
         this.loadingIcon = document.createElement("div");
@@ -28,8 +30,8 @@ class LocationSearchBarResultsToggle {
         this.errorMessage.classList.add(LocationSearchBarResultsToggle.ERROR_MESSAGE_CSS_MODIFIER_CLASS);
 
         this.loadingIcon.innerHTML = SVGIconElementCreator.create("./static/icon-sprite.svg", "progress");
-        this.noResultsMessage.innerText = "Pro zadaný text nebyla nalezena žádná lokace."; // todo - potom to nastavit podle jazyka
-        this.errorMessage.innerText = "Při načítání lokací bohužel došlo k chybě."; // todo - potom to nastavit podle jazyka
+        
+        languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
     }
 
     public showLoadingIcon(): void {
@@ -62,6 +64,11 @@ class LocationSearchBarResultsToggle {
         }
         this.container.appendChild(this.itemsContainer);
         this.currentlyDisplayedElement = this.itemsContainer;
+    }
+
+    private onLanguageChange(languageInfo: LanguageInfo): void {
+        this.noResultsMessage.innerText = languageInfo.localizedData.noResultsForLocationSearch;
+        this.errorMessage.innerText = languageInfo.localizedData.locationSearchError;
     }
 }
 
