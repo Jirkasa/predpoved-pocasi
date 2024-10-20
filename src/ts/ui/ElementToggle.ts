@@ -6,7 +6,7 @@ type ElementToggleConfig = {
     closeOnClickOutside?: boolean;
 }
 
-class ElementToggle {
+class ElementToggle { // todo - ještě nastavovat z-index
     private targetElement: HTMLElement;
     private openedCSSClass: string;
     private buttonElement: HTMLElement | null;
@@ -42,6 +42,8 @@ class ElementToggle {
     }
 
     public open(): void {
+        if (this.opened) return;
+
         this.targetElement.classList.add(this.openedCSSClass);
         if (this.buttonElement && this.buttonOpenedCSSClass) {
             this.buttonElement.classList.add(this.buttonOpenedCSSClass);
@@ -50,6 +52,8 @@ class ElementToggle {
     }
 
     public close(): void {
+        if (!this.opened) return;
+        
         this.targetElement.classList.remove(this.openedCSSClass);
         if (this.buttonElement && this.buttonOpenedCSSClass) {
             this.buttonElement.classList.remove(this.buttonOpenedCSSClass);

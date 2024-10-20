@@ -48,12 +48,13 @@
             <div class="weather-app-layout">
                 <div class="weather-app-layout__current-weather-side">
                     <div class="search-bar u-mb-4">
-                        <input type="text" placeholder="Vyhledat lokaci" spellcheck="false" autocomplete="off" class="search-bar__input">
+                        <input id="LocationSearchBarInput" type="text" placeholder="Vyhledat lokaci" spellcheck="false" autocomplete="off" class="search-bar__input">
                         <div class="search-bar__icon">
                             <svg>
                                 <use xlink:href="./static/icon-sprite.svg#search"></use>
                             </svg>
                         </div>
+                        <div id="LocationSearchBarResults" class="search-bar__results"></div>
                     </div>
                     <div class="tile">
                         <h2 class="u-mb-3">Aktuální počasí</h2>

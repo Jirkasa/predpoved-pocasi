@@ -43,4 +43,76 @@
             fill: @colors[primary-80];
         }
     }
+
+    &__results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 10;
+
+        background-color: @colors[grey-0];
+        border-radius: .8rem;
+        box-shadow: 0 .4rem .8rem rgba(@colors[grey-90], .2);
+
+        width: 100%;
+
+        transform-origin: top;
+        transform: translateY(.2rem) scale(0);
+
+        transition: all .2s;
+
+        overflow: hidden;
+
+        &--opened {
+            transform: translateY(.2rem) scale(1);
+        }
+    }
+
+    &__loading-icon {
+        padding: 1.2rem;
+
+        svg {
+            display: block;
+            margin: 0 auto;
+
+            width: 3.2rem;
+            height: 3.2rem;
+            fill: @colors[primary-60];
+
+            animation: rotate 0.5s linear infinite;
+        }
+    }
+
+    &__message {
+        font-size: 1.6rem;
+        line-height: 2rem;
+
+        color: @colors[grey-70];
+
+        padding: 1.2rem;
+
+        &--error {
+            color: @colors[red];
+        }
+    }
+
+    &__item {
+        font-size: 1.6rem;
+        line-height: 1;
+        text-align: left;
+
+        color: @colors[primary-80];
+        background-color: @colors[grey-0];
+        border: none;
+
+        width: 100%;
+
+        padding: 1.2rem 1.6rem;
+
+        cursor: pointer;
+
+        &:not(:last-child) {
+            border-bottom: .1rem solid @colors[grey-5];
+        }
+    }
 }

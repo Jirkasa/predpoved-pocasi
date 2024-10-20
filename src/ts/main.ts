@@ -2,6 +2,7 @@ import WeatherApp from "./core/WeatherApp";
 import OpenWeatherMapDataLoader from "./data/OpenWeatherMapDataLoader";
 import OpenWeatherMapLocationSearch from "./data/OpenWeatherMapLocationSearch";
 import ElementToggle from "./ui/ElementToggle";
+import LocationSearchBar from "./ui/LocationSearchBar";
 
 const OPEN_WEATHER_MAP_APP_ID = "610f182df978d44c879ed39ce0f7f9a9";
 
@@ -24,3 +25,9 @@ new ElementToggle({
     buttonOpenedCSSClass: "language-select__button--opened",
     closeOnClickOutside: true
 });
+
+new LocationSearchBar(
+    document.getElementById("LocationSearchBarInput") as HTMLInputElement,
+    document.getElementById("LocationSearchBarResults") as HTMLElement,
+    weatherApp
+);

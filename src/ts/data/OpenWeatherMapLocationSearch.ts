@@ -25,6 +25,8 @@ class OpenWeatherMapLocationSearch implements LocationSearch {
 
         const json = await response.json();
 
+        // todo - potom ještě odstranit kdyžtak duplicity
+
         const data = this.getLocationsDataFromJson(json);
         if (data === null) throw new Error("Locations could not be loaded.");
 
@@ -43,13 +45,14 @@ class OpenWeatherMapLocationSearch implements LocationSearch {
             if (typeof location.lon !== "number") return null;
 
             const localNames = location.local_names;
-            if (typeof localNames !== "object") return null;
 
             const localNamesMap = new Map<string, string>();
 
-            for (const [key, value] of Object.entries(localNames)) {
-                if (typeof value !== "string") return null;
-                localNamesMap.set(key, value);
+            if (typeof localNames === "object") {
+                for (const [key, value] of Object.entries(localNames)) {
+                    if (typeof value !== "string") return null;
+                    localNamesMap.set(key, value);
+                }
             }
 
             locations.push({
