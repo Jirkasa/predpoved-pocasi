@@ -14,6 +14,7 @@ class WeatherApp {
     private forecastWeatherLoadingManager: ForecastWeatherLoadingManager;
     private locationSearchManager: LocationSearchManager;
     private onLocationChangeEventSource = new EventSourcePoint<undefined>();
+    private weatherDataLoader: WeatherDataLoader;
 
     private currentLocation: LocationData | null = null;
 
@@ -21,6 +22,7 @@ class WeatherApp {
         this.currentWeatherLoadingManager = new CurrentWeatherLoadingManager(weatherDataLoader, latitude, longitude, language);
         this.forecastWeatherLoadingManager = new ForecastWeatherLoadingManager(weatherDataLoader, latitude, longitude, language);
         this.locationSearchManager = new LocationSearchManager(locationSearch);
+        this.weatherDataLoader = weatherDataLoader;
         
         const locationSearchByCoordinatesManager = new LocationSearchByCoordinatesManager(locationSearch);
         locationSearchByCoordinatesManager.addOnDataLoadedListener(location => this.onLocationSearchByCoordinatesLoaded(location));
@@ -62,6 +64,10 @@ class WeatherApp {
     public async searchForLocation(searchText: string): Promise<undefined> {
         this.locationSearchManager.setSearchText(searchText);
         this.locationSearchManager.loadData();
+    }
+
+    public getIconImageURL(iconIdentifier: string, large: boolean = false): string {
+        return this.weatherDataLoader.getIconURLByIconIdentifier(iconIdentifier, large);
     }
 
     public addOnCurrentWeatherLoadingStartedListener(callback: () => void): void {

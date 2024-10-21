@@ -45,17 +45,32 @@ class WeatherWebApp {
             currentWeatherFeelsLikeLabelId: "CurrentWeatherFeelsLikeLabel",
             currentWeatherHumidityLabelId: "CurrentWeatherHumidityLabel",
             currentWeatherWindLabelId: "CurrentWeatherWindLabel",
-            currentLocationNameId: "CurrentLocationName"
+            currentLocationNameId: "CurrentLocationName",
+            currentWeatherLoadingIconId: "CurrentWeatherLoadingIcon",
+            currentWeatherContentContainerId: "CurrentWeatherContentContainer",
+            currentWeatherTemperatureValueElementId: "CurrentWeatherTemperature",
+            currentWeatherImageId: "CurrentWeatherImage",
+            currentWeatherDescriptionId: "CurrentWeatherDescription",
+            currentWeatherFeelsLikeValueElementId: "CurrentWeatherFeelsLike",
+            currentWeatherHumidityValueElementId: "CurrentWeatherHumidity",
+            currentWeatherWindValueElementId: "CurrentWeatherWind"
         });
 
         this.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
+        // this.weatherApp.addOnLocationChangeListener(() => this.onLocationChange());
 
         this.languageManager.changeLanguage(language);
+        this.weatherApp.loadCurrentWeather();
     }
+
+    // private onLocationChange() {
+    //     this.weatherApp.loadCurrentWeather();
+    // }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {
         let language = LocalizationHelper.getLocale(languageInfo.language, true);
         this.weatherApp.setLanguage(language);
+        this.weatherApp.loadCurrentWeather();
     }
 
     private getDefaultCoordinatesByLanguage(language: AppLanguage): [number, number] {
@@ -87,3 +102,5 @@ class WeatherWebApp {
 }
 
 export default WeatherWebApp;
+
+// todo - ještě přidat nějakou obecnou stránku pro error

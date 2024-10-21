@@ -1,3 +1,4 @@
+import WeatherApp from "../../../core/WeatherApp";
 import AppLanguage from "../../../localization/AppLanguage";
 import LanguageInfo from "../../../localization/LanguageInfo";
 import LanguageManager from "../../../localization/LanguageManager";

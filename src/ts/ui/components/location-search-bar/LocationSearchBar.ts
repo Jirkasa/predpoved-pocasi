@@ -113,6 +113,7 @@ class LocationSearchBar {
 
     private onLocationButtonClick(location: LocationData): void {
         this.weatherApp.setLocation(location);
+        this.weatherApp.loadCurrentWeather();
         this.input.value = "";
         this.resultsContainerToggle.close();
     }

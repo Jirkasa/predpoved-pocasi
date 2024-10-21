@@ -1,6 +1,7 @@
 import WeatherApp from "../core/WeatherApp";
 import LanguageInfo from "../localization/LanguageInfo";
 import LanguageManager from "../localization/LanguageManager";
+import CurrentWeatherDisplay from "./components/current-weather-display/CurrentWeatherDisplay";
 import LanguageSelect from "./components/language-select/LanguageSelect";
 import LanguageUpdater from "./components/language-updater/LanguageUpdater";
 import LocationNameDisplay from "./components/location-name-display/LocationNameDisplay";
@@ -28,6 +29,14 @@ type WeatherAppUIConfig = {
     currentWeatherHumidityLabelId: string;
     currentWeatherWindLabelId: string;
     currentLocationNameId: string;
+    currentWeatherLoadingIconId: string;
+    currentWeatherContentContainerId: string;
+    currentWeatherImageId: string;
+    currentWeatherTemperatureValueElementId: string;
+    currentWeatherDescriptionId: string;
+    currentWeatherFeelsLikeValueElementId: string;
+    currentWeatherHumidityValueElementId: string;
+    currentWeatherWindValueElementId: string;
 }
 
 class WeatherAppUI {
@@ -77,6 +86,24 @@ class WeatherAppUI {
             config.languageManager
         );
 
+        const currentWeatherIconImage = this.getElementById(config.currentWeatherImageId);
+        if (!(currentWeatherIconImage instanceof HTMLImageElement)) {
+            throw new Error(`Element with id ${config.currentWeatherImageId} is not image element.`);
+        }
+        new CurrentWeatherDisplay(
+            config.weatherApp,
+            {
+                loadingIcon: this.getElementById(config.currentWeatherLoadingIconId),
+                contentContainer: this.getElementById(config.currentWeatherContentContainerId),
+                image: currentWeatherIconImage,
+                temperatureValue: this.getElementById(config.currentWeatherTemperatureValueElementId),
+                weatherDescription: this.getElementById(config.currentWeatherDescriptionId),
+                feelsLikeValue: this.getElementById(config.currentWeatherFeelsLikeValueElementId),
+                humidityValue: this.getElementById(config.currentWeatherHumidityValueElementId),
+                windValue: this.getElementById(config.currentWeatherWindValueElementId)
+            }
+        )
+
         new LanguageUpdater(
             config.languageManager,
             {
@@ -88,15 +115,13 @@ class WeatherAppUI {
             }
         );
 
-        config.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
+        config.languageManager.addOnLanguageChangeListener(() => this.onLanguageChange());
     }
 
-    private onLanguageChange(languageInfo: LanguageInfo): void {
+    private onLanguageChange(): void {
         if (this.languageLoaded) return;
 
-        // todo - update gui
         this.pagesToggle.showWeatherAppPage();
-
         this.languageLoaded = true;
     }
 

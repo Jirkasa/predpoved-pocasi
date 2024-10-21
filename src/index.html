@@ -67,33 +67,40 @@
                     </div>
                     <div class="tile">
                         <h2 id="CurrentWeatherHeading" class="u-mb-3">Aktuální počasí</h2>
-                        <div class="weather-display u-mb-4">
-                            <div class="weather-display__icon">
-                                <div class="weather-icon weather-icon--large">
-                                    <img src="https://openweathermap.org/img/wn/10d@4x.png" alt="skoro jasno">
-                                </div>
-                            </div>
-                            <p class="weather-display__temperature"><span class="weather-display__temperature-value">13</span><span class="weather-display__temperature-unit">°C</span></p>
-                            <p class="weather-display__description">skoro jasno</p>
+                        <div id="CurrentWeatherLoadingIcon" class="loading-spinner">
+                            <svg>
+                                <use xlink:href="./static/icon-sprite.svg#progress"></use>
+                            </svg>
                         </div>
-                        <p class="info-row u-mb-2">
-                            <svg>
-                                <use xlink:href="./static/icon-sprite.svg#temperature"></use>
-                            </svg>
-                            <span><span id="CurrentWeatherFeelsLikeLabel">Pocitová teplota</span>: 12°C</span>
-                        </p>
-                        <p class="info-row u-mb-2">
-                            <svg>
-                                <use xlink:href="./static/icon-sprite.svg#humidity"></use>
-                            </svg>
-                            <span><span id="CurrentWeatherHumidityLabel">Vlhkost</span>: 43%</span>
-                        </p>
-                        <p class="info-row">
-                            <svg>
-                                <use xlink:href="./static/icon-sprite.svg#air"></use>
-                            </svg>
-                            <span><span id="CurrentWeatherWindLabel">Vítr</span>: 21 km/h</span>
-                        </p>
+                        <div id="CurrentWeatherContentContainer" style="display: none;">
+                            <div class="weather-display u-mb-4">
+                                <div class="weather-display__icon">
+                                    <div class="weather-icon weather-icon--large">
+                                        <img id="CurrentWeatherImage" src="" alt="">
+                                    </div>
+                                </div>
+                                <p class="weather-display__temperature"><span id="CurrentWeatherTemperature" class="weather-display__temperature-value"></span><span class="weather-display__temperature-unit">°C</span></p>
+                                <p id="CurrentWeatherDescription" class="weather-display__description"></p>
+                            </div>
+                            <p class="info-row u-mb-2">
+                                <svg>
+                                    <use xlink:href="./static/icon-sprite.svg#temperature"></use>
+                                </svg>
+                                <span><span id="CurrentWeatherFeelsLikeLabel">Pocitová teplota</span>: <span id="CurrentWeatherFeelsLike"></span>°C</span>
+                            </p>
+                            <p class="info-row u-mb-2">
+                                <svg>
+                                    <use xlink:href="./static/icon-sprite.svg#humidity"></use>
+                                </svg>
+                                <span><span id="CurrentWeatherHumidityLabel">Vlhkost</span>: <span id="CurrentWeatherHumidity"></span>%</span>
+                            </p>
+                            <p class="info-row">
+                                <svg>
+                                    <use xlink:href="./static/icon-sprite.svg#air"></use>
+                                </svg>
+                                <span><span id="CurrentWeatherWindLabel">Vítr</span>: <span id="CurrentWeatherWind"></span> km/h</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="weather-app-layout__forecast-side">
