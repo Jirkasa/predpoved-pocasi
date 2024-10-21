@@ -25,7 +25,6 @@ class OpenWeatherMapLocationSearch implements LocationSearch {
         if (!response.ok) throw new Error("Locations could not be loaded.");
 
         const json = await response.json();
-        console.log(json);
 
         // todo - potom ještě odstranit kdyžtak duplicity
 

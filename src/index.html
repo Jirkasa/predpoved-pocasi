@@ -106,103 +106,110 @@
                 <div class="weather-app-layout__forecast-side">
                     <div class="tile">
                         <h2 id="ForecastHeading" class="u-mb-3">Předpověď</h2>
-                        <div class="navigation u-mb-3">
-                            <div class="navigation__item">
-                                <button class="navigation__button navigation__button--active">Teplota</button>
-                            </div>
-                            <div class="navigation__item">
-                                <button class="navigation__button">Pocitová teplota</button>
-                            </div>
-                            <div class="navigation__item">
-                                <button class="navigation__button">Srážky</button>
-                            </div>
-                            <div class="navigation__item">
-                                <button class="navigation__button">Vlhkost</button>
-                            </div>
-                            <div class="navigation__item">
-                                <button class="navigation__button">Vítr</button>
-                            </div>
+                        <div id="ForecastLoadingIcon" class="loading-spinner">
+                            <svg>
+                                <use xlink:href="./static/icon-sprite.svg#progress"></use>
+                            </svg>
                         </div>
-                        <div class="graph u-mb-4">
-                            <div class="graph__canvas">
-                                <canvas></canvas>
+                        <div id="ForecastContentContainer" style="display: none;">
+                            <div class="navigation u-mb-3">
+                                <div class="navigation__item">
+                                    <button id="ForecastTemperatureButton" class="navigation__button navigation__button--active">Teplota</button>
+                                </div>
+                                <div class="navigation__item">
+                                    <button id="ForecastFeelsLikeButton" class="navigation__button">Pocitová teplota</button>
+                                </div>
+                                <div class="navigation__item">
+                                    <button id="ForecastPrecipitationButton" class="navigation__button">Srážky</button>
+                                </div>
+                                <div class="navigation__item">
+                                    <button id="ForecastHumidityButton" class="navigation__button">Vlhkost</button>
+                                </div>
+                                <div class="navigation__item">
+                                    <button id="ForecastWindButton" class="navigation__button">Vítr</button>
+                                </div>
                             </div>
-                            <div class="graph__timeline">
-                                <div class="graph__timeline-point" style="left: 12.5%;">3:00</div>
-                                <div class="graph__timeline-point" style="left: 25%;">6:00</div>
-                                <div class="graph__timeline-point" style="left: 37.5%;">9:00</div>
-                                <div class="graph__timeline-point" style="left: 50%;">12:00</div>
-                                <div class="graph__timeline-point" style="left: 62.5%;">15:00</div>
-                                <div class="graph__timeline-point" style="left: 75%;">18:00</div>
-                                <div class="graph__timeline-point" style="left: 87.5%;">21:00</div>
+                            <div class="graph u-mb-4">
+                                <div class="graph__canvas">
+                                    <canvas></canvas>
+                                </div>
+                                <div class="graph__timeline">
+                                    <div class="graph__timeline-point" style="left: 12.5%;">3:00</div>
+                                    <div class="graph__timeline-point" style="left: 25%;">6:00</div>
+                                    <div class="graph__timeline-point" style="left: 37.5%;">9:00</div>
+                                    <div class="graph__timeline-point" style="left: 50%;">12:00</div>
+                                    <div class="graph__timeline-point" style="left: 62.5%;">15:00</div>
+                                    <div class="graph__timeline-point" style="left: 75%;">18:00</div>
+                                    <div class="graph__timeline-point" style="left: 87.5%;">21:00</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="days-navigation">
-                            <button class="day-button day-button--active">
-                                <span class="day-button__day">pá</span>
-                                <div class="weather-icon">
-                                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
-                                </div>
-                                <span class="day-button__temperature">13°C</span>
-                                <span class="day-button__night-temperature">
-                                    <svg>
-                                        <use xlink:href="./static/icon-sprite.svg#night"></use>
-                                    </svg>
-                                    <span>13°C</span>
-                                </span>
-                            </button>
-                            <button class="day-button">
-                                <span class="day-button__day">so</span>
-                                <div class="weather-icon">
-                                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
-                                </div>
-                                <span class="day-button__temperature">11°C</span>
-                                <span class="day-button__night-temperature">
-                                    <svg>
-                                        <use xlink:href="./static/icon-sprite.svg#night"></use>
-                                    </svg>
-                                    <span>12°C</span>
-                                </span>
-                            </button>
-                            <button class="day-button">
-                                <span class="day-button__day">ne</span>
-                                <div class="weather-icon">
-                                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
-                                </div>
-                                <span class="day-button__temperature">9°C</span>
-                                <span class="day-button__night-temperature">
-                                    <svg>
-                                        <use xlink:href="./static/icon-sprite.svg#night"></use>
-                                    </svg>
-                                    <span>10°C</span>
-                                </span>
-                            </button>
-                            <button class="day-button">
-                                <span class="day-button__day">po</span>
-                                <div class="weather-icon">
-                                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
-                                </div>
-                                <span class="day-button__temperature">10°C</span>
-                                <span class="day-button__night-temperature">
-                                    <svg>
-                                        <use xlink:href="./static/icon-sprite.svg#night"></use>
-                                    </svg>
-                                    <span>30°C</span>
-                                </span>
-                            </button>
-                            <button class="day-button">
-                                <span class="day-button__day">út</span>
-                                <div class="weather-icon">
-                                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
-                                </div>
-                                <span class="day-button__temperature">7°C</span>
-                                <span class="day-button__night-temperature">
-                                    <svg>
-                                        <use xlink:href="./static/icon-sprite.svg#night"></use>
-                                    </svg>
-                                    <span>11°C</span>
-                                </span>
-                            </button>
+                            <div class="days-navigation">
+                                <button class="day-button day-button--active">
+                                    <span class="day-button__day">pá</span>
+                                    <div class="weather-icon">
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
+                                    </div>
+                                    <span class="day-button__temperature">13°C</span>
+                                    <span class="day-button__night-temperature">
+                                        <svg>
+                                            <use xlink:href="./static/icon-sprite.svg#night"></use>
+                                        </svg>
+                                        <span>13°C</span>
+                                    </span>
+                                </button>
+                                <button class="day-button">
+                                    <span class="day-button__day">so</span>
+                                    <div class="weather-icon">
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
+                                    </div>
+                                    <span class="day-button__temperature">11°C</span>
+                                    <span class="day-button__night-temperature">
+                                        <svg>
+                                            <use xlink:href="./static/icon-sprite.svg#night"></use>
+                                        </svg>
+                                        <span>12°C</span>
+                                    </span>
+                                </button>
+                                <button class="day-button">
+                                    <span class="day-button__day">ne</span>
+                                    <div class="weather-icon">
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
+                                    </div>
+                                    <span class="day-button__temperature">9°C</span>
+                                    <span class="day-button__night-temperature">
+                                        <svg>
+                                            <use xlink:href="./static/icon-sprite.svg#night"></use>
+                                        </svg>
+                                        <span>10°C</span>
+                                    </span>
+                                </button>
+                                <button class="day-button">
+                                    <span class="day-button__day">po</span>
+                                    <div class="weather-icon">
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
+                                    </div>
+                                    <span class="day-button__temperature">10°C</span>
+                                    <span class="day-button__night-temperature">
+                                        <svg>
+                                            <use xlink:href="./static/icon-sprite.svg#night"></use>
+                                        </svg>
+                                        <span>30°C</span>
+                                    </span>
+                                </button>
+                                <button class="day-button">
+                                    <span class="day-button__day">út</span>
+                                    <div class="weather-icon">
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="skoro jasno">
+                                    </div>
+                                    <span class="day-button__temperature">7°C</span>
+                                    <span class="day-button__night-temperature">
+                                        <svg>
+                                            <use xlink:href="./static/icon-sprite.svg#night"></use>
+                                        </svg>
+                                        <span>11°C</span>
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

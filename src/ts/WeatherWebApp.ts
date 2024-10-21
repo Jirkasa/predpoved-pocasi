@@ -53,24 +53,28 @@ class WeatherWebApp {
             currentWeatherDescriptionId: "CurrentWeatherDescription",
             currentWeatherFeelsLikeValueElementId: "CurrentWeatherFeelsLike",
             currentWeatherHumidityValueElementId: "CurrentWeatherHumidity",
-            currentWeatherWindValueElementId: "CurrentWeatherWind"
+            currentWeatherWindValueElementId: "CurrentWeatherWind",
+            forecastLoadingIconId: "ForecastLoadingIcon",
+            forecastContentContainerId: "ForecastContentContainer",
+            forecastTemperatureButtonId: "ForecastTemperatureButton",
+            forecastFeelsLikeButtonId: "ForecastFeelsLikeButton",
+            forecastPrecipitationButtonId: "ForecastPrecipitationButton",
+            forecastHumidityButtonId: "ForecastHumidityButton",
+            forecastWindButtonId: "ForecastWindButton"
         });
 
         this.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
-        // this.weatherApp.addOnLocationChangeListener(() => this.onLocationChange());
 
         this.languageManager.changeLanguage(language);
         this.weatherApp.loadCurrentWeather();
+        this.weatherApp.loadForecastWeather();
     }
-
-    // private onLocationChange() {
-    //     this.weatherApp.loadCurrentWeather();
-    // }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {
         let language = LocalizationHelper.getLocale(languageInfo.language, true);
         this.weatherApp.setLanguage(language);
         this.weatherApp.loadCurrentWeather();
+        this.weatherApp.loadForecastWeather();
     }
 
     private getDefaultCoordinatesByLanguage(language: AppLanguage): [number, number] {

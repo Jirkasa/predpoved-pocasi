@@ -2,6 +2,7 @@ import WeatherApp from "../core/WeatherApp";
 import LanguageInfo from "../localization/LanguageInfo";
 import LanguageManager from "../localization/LanguageManager";
 import CurrentWeatherDisplay from "./components/current-weather-display/CurrentWeatherDisplay";
+import ForecastDisplay from "./components/forecast-display/ForecastDisplay";
 import LanguageSelect from "./components/language-select/LanguageSelect";
 import LanguageUpdater from "./components/language-updater/LanguageUpdater";
 import LocationNameDisplay from "./components/location-name-display/LocationNameDisplay";
@@ -37,6 +38,13 @@ type WeatherAppUIConfig = {
     currentWeatherFeelsLikeValueElementId: string;
     currentWeatherHumidityValueElementId: string;
     currentWeatherWindValueElementId: string;
+    forecastLoadingIconId: string;
+    forecastContentContainerId: string;
+    forecastTemperatureButtonId: string;
+    forecastFeelsLikeButtonId: string;
+    forecastPrecipitationButtonId: string;
+    forecastHumidityButtonId: string;
+    forecastWindButtonId: string;
 }
 
 class WeatherAppUI {
@@ -102,7 +110,21 @@ class WeatherAppUI {
                 humidityValue: this.getElementById(config.currentWeatherHumidityValueElementId),
                 windValue: this.getElementById(config.currentWeatherWindValueElementId)
             }
-        )
+        );
+
+        new ForecastDisplay(
+            config.weatherApp,
+            config.languageManager,
+            {
+                loadingIcon: this.getElementById(config.forecastLoadingIconId),
+                contentContainer: this.getElementById(config.forecastContentContainerId),
+                temperatureButton: this.getElementById(config.forecastTemperatureButtonId),
+                feelsLikeButton: this.getElementById(config.forecastFeelsLikeButtonId),
+                precipitationButton: this.getElementById(config.forecastPrecipitationButtonId),
+                humidityButton: this.getElementById(config.forecastHumidityButtonId),
+                windButton: this.getElementById(config.forecastWindButtonId)
+            }
+        );
 
         new LanguageUpdater(
             config.languageManager,

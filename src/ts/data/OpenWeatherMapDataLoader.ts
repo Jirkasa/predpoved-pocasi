@@ -51,6 +51,7 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
         if (!response.ok) throw new Error("Forecast weather data could not be loaded.");
 
         const json = await response.json();
+        console.log(json);
 
         const data = this.getForecastWeatherDataFromJson(json);
         if (data === null) throw new Error("Forecast weather data could not be loaded.");
