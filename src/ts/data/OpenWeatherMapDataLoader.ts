@@ -1,4 +1,5 @@
 import CurrentWeatherData from "../core/data/CurrentWeatherData";
+import PartOfDay from "../core/data/PartOfDay";
 import WeatherData from "../core/data/WeatherData";
 import WeatherDataLoader from "../core/data/WeatherDataLoader";
 
@@ -123,6 +124,19 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
             if (typeof wind !== "object") return null;
             if (typeof wind.speed !== "number") return null;
 
+            const sys = item.sys;
+            if (typeof sys !== "object") return null;
+            let partOfDay: PartOfDay | null = null;
+            switch (sys.pod) {
+                case "d":
+                    partOfDay = PartOfDay.DAY;
+                    break;
+                case "n":
+                    partOfDay = PartOfDay.NIGHT;
+                    break;
+            }
+            if (partOfDay === null) return null;
+
             weatherDataList.push({
                 time: item.dt,
                 temperature: main.temp,
@@ -130,7 +144,8 @@ class OpenWeatherMapDataLoader implements WeatherDataLoader {
                 iconIdentifier: weather.icon,
                 probabilityOfPrecipitation: item.pop,
                 humidity: main.humidity,
-                windSpeed: wind.speed
+                windSpeed: wind.speed,
+                partOfDay: partOfDay
             });
         }
 

@@ -1,3 +1,5 @@
+import PartOfDay from "./PartOfDay";
+
 type WeatherData = {
     time: number;
     temperature: number;
@@ -6,6 +8,7 @@ type WeatherData = {
     probabilityOfPrecipitation: number;
     humidity: number;
     windSpeed: number;
+    partOfDay: PartOfDay;
 }
 
 export default WeatherData;

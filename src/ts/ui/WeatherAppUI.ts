@@ -45,6 +45,7 @@ type WeatherAppUIConfig = {
     forecastPrecipitationButtonId: string;
     forecastHumidityButtonId: string;
     forecastWindButtonId: string;
+    daysNavigationId: string;
 }
 
 class WeatherAppUI {
@@ -122,7 +123,8 @@ class WeatherAppUI {
                 feelsLikeButton: this.getElementById(config.forecastFeelsLikeButtonId),
                 precipitationButton: this.getElementById(config.forecastPrecipitationButtonId),
                 humidityButton: this.getElementById(config.forecastHumidityButtonId),
-                windButton: this.getElementById(config.forecastWindButtonId)
+                windButton: this.getElementById(config.forecastWindButtonId),
+                daysNavigation: this.getElementById(config.daysNavigationId)
             }
         );
 

@@ -60,7 +60,8 @@ class WeatherWebApp {
             forecastFeelsLikeButtonId: "ForecastFeelsLikeButton",
             forecastPrecipitationButtonId: "ForecastPrecipitationButton",
             forecastHumidityButtonId: "ForecastHumidityButton",
-            forecastWindButtonId: "ForecastWindButton"
+            forecastWindButtonId: "ForecastWindButton",
+            daysNavigationId: "ForecastDaysNavigation"
         });
 
         this.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
