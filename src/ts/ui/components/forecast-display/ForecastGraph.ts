@@ -8,6 +8,13 @@ enum CurrentGraphDisplayState {
     TEMPERATURE
 }
 
+type GraphColorsConfig = {
+    line: string;
+    lineBackground: string | null;
+    point: string;
+    text: string;
+}
+
 class ForecastGraph {
     private static readonly TIMELINE_POINT_CSS_CLASS = "graph__timeline-point";
     private static readonly GRAPH_VERTICAL_PADDING = 32;
@@ -59,21 +66,26 @@ class ForecastGraph {
             temperatures.push(Math.round(item.temperature));
         }
 
-        this.timelineElement.innerHTML = "";
-
         this.updateTimeline(data);
-        this.drawGraph(temperatures, previousGraphLastValue, nextGraphFirstValue, "°C");
+        this.drawGraph(temperatures, previousGraphLastValue, nextGraphFirstValue, "°C", {
+            line: "#FABB33",
+            lineBackground: "#FEF1D6",
+            point: "#FABB33",
+            text: "#856215"
+        });
     }
 
-    private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, valueUnit: string | null = null): void {
+    private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, valueUnit: string | null, colors: GraphColorsConfig): void {
         const stepSize = this.canvas.width / (values.length+1);
         const maxValue = this.getMaxValue(values, previousGraphLastValue, nextGraphFirstValue);
         const minValue = this.getMinValue(values, previousGraphLastValue, nextGraphFirstValue);
 
         this.drawGraphBackground();
-        this.drawGraphLineBackground(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, "#FEF1D6");
-        this.drawGraphLine(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, "#FABB33");
-        this.drawGraphPoints(values, stepSize, minValue, maxValue, "#FABB33", "#856215", valueUnit);
+        if (colors.lineBackground !== null) {
+            this.drawGraphLineBackground(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, colors.lineBackground);
+        }
+        this.drawGraphLine(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, colors.line);
+        this.drawGraphPoints(values, stepSize, minValue, maxValue, colors.point, colors.text, valueUnit);
     }
 
     private drawGraphBackground(): void {
@@ -184,7 +196,7 @@ class ForecastGraph {
             );
             times.push(time);
         }
-
+        
         this.timelineElement.innerHTML = "";
         const percentage = 100/(times.length+1);
 
