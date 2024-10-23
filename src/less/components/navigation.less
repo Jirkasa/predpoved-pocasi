@@ -28,10 +28,16 @@
         color: @colors[primary-80];
         background-color: transparent;
         border: none;
+        border-radius: .4rem;
 
         &:hover {
             text-decoration: underline;
             cursor: pointer;
+        }
+
+        &:focus-visible {
+            outline: .2rem solid @colors[primary-80];
+            outline-offset: .2rem;
         }
 
         &--active {

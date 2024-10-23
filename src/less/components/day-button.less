@@ -13,6 +13,11 @@
 
     cursor: pointer;
 
+    transition: background-color .15s;
+
+    &:focus-visible {
+        outline: .2rem solid @colors[primary-80];
+    }
     &--active, &:hover {
         background-color: @colors[primary-5];
     }

@@ -12,6 +12,11 @@
         font-size: 0;
 
         cursor: pointer;
+
+        &:focus-visible {
+            outline: .2rem solid @colors[primary-80];
+            outline-offset: .2rem;
+        }
     }
 
     &__button-flag {
@@ -73,6 +78,11 @@
         padding: 1.2rem;
 
         cursor: pointer;
+
+        &:focus-visible {
+            outline: .2rem solid @colors[primary-80];
+            outline-offset: -.4rem;
+        }
 
         &:not(:last-child) {
             border-bottom: .1rem solid @colors[grey-5];
