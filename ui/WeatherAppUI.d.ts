@@ -46,7 +46,7 @@ declare class WeatherAppUI {
     private pagesToggle;
     private languageLoaded;
     constructor(config: WeatherAppUIConfig);
-    private onWeatherLoadingError;
+    private onDataLoadingError;
     private onLanguageChange;
     private getElementById;
 }
