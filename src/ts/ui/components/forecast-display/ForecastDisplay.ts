@@ -58,7 +58,7 @@ class ForecastDisplay {
         this.weatherApp = weatherApp;
         this.languageManager = languageManager;
 
-        this.forecastGraphNavigation.addOnActiveItemChangeListener(itemType => this.onGraphNavigationActiveItemChange(itemType));
+        this.forecastGraphNavigation.addOnActiveItemChangeListener(() => this.onGraphNavigationActiveItemChange());
         weatherApp.addOnForecastWeatherLoadingStartedListener(() => this.onForecastLoadingStarted());
         weatherApp.addOnForecastWeatherLoadedListener(data => this.onForecastLoaded(data));
         languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
@@ -97,7 +97,7 @@ class ForecastDisplay {
         }
     }
 
-    private onGraphNavigationActiveItemChange(itemType: ForecastGraphNavigationItem): void {
+    private onGraphNavigationActiveItemChange(): void {
         if (this.currentlyActiveDayButton === null) return;
         this.updateGraph(this.currentlyActiveDayButton.getDayWeatherData());
     }
@@ -135,8 +135,16 @@ class ForecastDisplay {
                 ? previousWeatherData[previousWeatherData.length-1].temperature : null;
                 let nextGraphFirstTemperature = nextWeatherData !== null && nextWeatherData.length > 0
                 ? nextWeatherData[0].temperature : null;
-                
+
                 this.forecastGraph.displayTemperature(dayWeatherData.data, previousGraphLastTemperature, nextGraphFirstTemperature);
+                break;
+            case ForecastGraphNavigationItem.FEELS_LIKE:
+                let previousGraphLastFeelsLike = previousWeatherData !== null && previousWeatherData.length > 0
+                ? previousWeatherData[previousWeatherData.length-1].feelsLike : null;
+                let nextGraphFirstFeelsLike = nextWeatherData !== null && nextWeatherData.length > 0
+                ? nextWeatherData[0].feelsLike : null;
+
+                this.forecastGraph.displayFeelsLike(dayWeatherData.data, previousGraphLastFeelsLike, nextGraphFirstFeelsLike);
                 break;
             default:
                 this.forecastGraph.displayNone();

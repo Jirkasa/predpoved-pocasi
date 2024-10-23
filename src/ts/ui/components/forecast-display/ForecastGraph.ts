@@ -5,7 +5,8 @@ import LocalizationHelper from "../../../localization/utils/LocalizationHelper";
 
 enum CurrentGraphDisplayState {
     NONE,
-    TEMPERATURE
+    TEMPERATURE,
+    FEELS_LIKE
 }
 
 type GraphColorsConfig = {
@@ -61,18 +62,46 @@ class ForecastGraph {
         this.updateCurrentState(CurrentGraphDisplayState.TEMPERATURE, data, previousGraphLastValue, nextGraphFirstValue);
 
         const temperatures: number[] = [];
-
         for (let item of data) {
             temperatures.push(Math.round(item.temperature));
         }
 
         this.updateTimeline(data);
-        this.drawGraph(temperatures, previousGraphLastValue, nextGraphFirstValue, "°C", {
-            line: "#FABB33",
-            lineBackground: "#FEF1D6",
-            point: "#FABB33",
-            text: "#856215"
-        });
+        this.drawGraph(
+            temperatures,
+            previousGraphLastValue !== null ? Math.round(previousGraphLastValue) : null,
+            nextGraphFirstValue !== null ? Math.round(nextGraphFirstValue) : null,
+            "°C",
+            {
+                line: "#FABB33",
+                lineBackground: "#FEF1D6",
+                point: "#FABB33",
+                text: "#856215"
+            }
+        );
+    }
+
+    public displayFeelsLike(data: WeatherData[], previousGraphLastValue: number | null = null, nextGraphFirstValue: number | null = null): void {
+        this.updateCurrentState(CurrentGraphDisplayState.FEELS_LIKE, data, previousGraphLastValue, nextGraphFirstValue);
+
+        const temperatures: number[] = [];
+        for (let item of data) {
+            temperatures.push(Math.round(item.feelsLike));
+        }
+
+        this.updateTimeline(data);
+        this.drawGraph(
+            temperatures,
+            previousGraphLastValue !== null ? Math.round(previousGraphLastValue) : null,
+            nextGraphFirstValue !== null ? Math.round(nextGraphFirstValue) : null,
+            "°C",
+            {
+                line: "#FABB33",
+                lineBackground: "#FEF1D6",
+                point: "#FABB33",
+                text: "#856215"
+            }
+        );
     }
 
     private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, valueUnit: string | null, colors: GraphColorsConfig): void {
@@ -196,7 +225,7 @@ class ForecastGraph {
             );
             times.push(time);
         }
-        
+
         this.timelineElement.innerHTML = "";
         const percentage = 100/(times.length+1);
 
