@@ -1,0 +1,37 @@
+import WeatherData from "../../../core/data/WeatherData";
+import LanguageManager from "../../../localization/LanguageManager";
+declare class ForecastGraph {
+    private static readonly TIMELINE_POINT_CSS_CLASS;
+    private static readonly GRAPH_VERTICAL_PADDING;
+    private static readonly GRAPH_POINT_RADIUS;
+    private static readonly GRAPH_TEXT_POINT_OFFSET;
+    private canvas;
+    private timelineElement;
+    private languageManager;
+    private canvasCtx;
+    private currentDisplayState;
+    private currentWeatherData;
+    private currentPreviousGraphLastValue;
+    private currentNextGraphFirstValue;
+    constructor(canvas: HTMLCanvasElement, timelineElement: HTMLElement, languageManager: LanguageManager);
+    displayNone(): void;
+    displayTemperature(data: WeatherData[], previousGraphLastValue?: number | null, nextGraphFirstValue?: number | null): void;
+    displayFeelsLike(data: WeatherData[], previousGraphLastValue?: number | null, nextGraphFirstValue?: number | null): void;
+    displayProbabilityOfPerception(data: WeatherData[], previousGraphLastValue?: number | null, nextGraphFirstValue?: number | null): void;
+    displayHumidity(data: WeatherData[], previousGraphLastValue?: number | null, nextGraphFirstValue?: number | null): void;
+    displayWindSpeed(data: WeatherData[], previousGraphLastValue?: number | null, nextGraphFirstValue?: number | null): void;
+    private drawGraph;
+    private drawGraphBackground;
+    private drawGraphLine;
+    private drawGraphLineBackground;
+    private drawGraphPoints;
+    private updateTimeline;
+    private getScaledValue;
+    private getMaxValue;
+    private getMinValue;
+    private updateCurrentState;
+    private onLanguageChange;
+    private onCanvasResize;
+    private rerender;
+}
+export default ForecastGraph;

@@ -1,0 +1,34 @@
+import CurrentWeatherData from "./data/CurrentWeatherData";
+import LocationData from "./data/LocationData";
+import LocationSearch from "./data/LocationSearch";
+import WeatherData from "./data/WeatherData";
+import WeatherDataLoader from "./data/WeatherDataLoader";
+declare class WeatherApp {
+    private currentWeatherLoadingManager;
+    private forecastWeatherLoadingManager;
+    private locationSearchManager;
+    private onLocationChangeEventSource;
+    private weatherDataLoader;
+    private currentLocation;
+    constructor(weatherDataLoader: WeatherDataLoader, locationSearch: LocationSearch, latitude: number, longitude: number, language: string);
+    getCurrentLocationName(locale?: string | null): string;
+    getCurrentLocationCoordinates(): [number, number] | null;
+    setLocation(location: LocationData): void;
+    setLanguage(language: string): void;
+    loadCurrentWeather(): Promise<undefined>;
+    loadForecastWeather(): Promise<undefined>;
+    searchForLocation(searchText: string): Promise<undefined>;
+    getIconImageURL(iconIdentifier: string, large?: boolean): string;
+    addOnCurrentWeatherLoadingStartedListener(callback: () => void): void;
+    addOnCurrentWeatherLoadedListener(callback: (data: CurrentWeatherData) => void): void;
+    addOnCurrentWeatherLoadingErrorListener(callback: () => void): void;
+    addOnForecastWeatherLoadingStartedListener(callback: () => void): void;
+    addOnForecastWeatherLoadedListener(callback: (data: WeatherData[]) => void): void;
+    addOnForecastWeatherLoadingErrorListener(callback: () => void): void;
+    addOnLocationSearchLoadingStartedListener(callback: () => void): void;
+    addOnLocationSearchLoadedListener(callback: (data: LocationData[]) => void): void;
+    addOnLocationSearchLoadingErrorListener(callback: () => void): void;
+    addOnLocationChangeListener(callback: () => void): void;
+    private onLocationSearchByCoordinatesLoaded;
+}
+export default WeatherApp;
