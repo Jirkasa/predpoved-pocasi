@@ -1,11 +1,12 @@
 import WeatherData from "../../../core/data/WeatherData";
-import WeatherDataHelper from "../../../core/utils/WeatherDataHelper";
+import WeatherDataHelper, { DayWeatherData } from "../../../core/utils/WeatherDataHelper";
 import WeatherApp from "../../../core/WeatherApp";
 import LanguageInfo from "../../../localization/LanguageInfo";
 import LanguageManager from "../../../localization/LanguageManager";
 import LocalizationHelper from "../../../localization/utils/LocalizationHelper";
 import DayButton from "./DayButton";
 import ForecastDisplayToggle from "./ForecastDisplayToggle";
+import ForecastGraph from "./ForecastGraph";
 
 export type ForecastDisplayElementsConfig = {
     loadingIcon: HTMLElement;
@@ -16,6 +17,8 @@ export type ForecastDisplayElementsConfig = {
     humidityButton: HTMLElement;
     windButton: HTMLElement;
     daysNavigation: HTMLElement;
+    graphCanvas: HTMLCanvasElement;
+    graphTimelineElement: HTMLElement;
 }
 
 class ForecastDisplay {
@@ -26,18 +29,29 @@ class ForecastDisplay {
     private humidityButton: HTMLElement;
     private windButton: HTMLElement;
     private daysNavigation: HTMLElement;
+    private forecastGraph: ForecastGraph;
+
     private weatherApp: WeatherApp;
     private languageManager: LanguageManager;
+
     private dayButtons: DayButton[] = [];
+    private currentlyActiveDayButton: DayButton | null = null;
+    private dayWeatherData: DayWeatherData[] = [];
 
     constructor(weatherApp: WeatherApp, languageManager: LanguageManager, elements: ForecastDisplayElementsConfig) {
         this.toggle = new ForecastDisplayToggle(elements.loadingIcon, elements.contentContainer);
-        this.temperatureButton = elements.temperatureButton;
+        this.temperatureButton = elements.temperatureButton; // todo - tady ty tlačítka navigace vypreparovat do samostatné komponenty (asi jako GraphNavigation)
         this.feelsLikeButton = elements.feelsLikeButton;
         this.precipitationButton = elements.precipitationButton;
         this.humidityButton = elements.humidityButton;
         this.windButton = elements.windButton;
         this.daysNavigation = elements.daysNavigation;
+        this.forecastGraph = new ForecastGraph(
+            elements.graphCanvas,
+            elements.graphTimelineElement,
+            languageManager
+        );
+
         this.weatherApp = weatherApp;
         this.languageManager = languageManager;
 
@@ -52,16 +66,62 @@ class ForecastDisplay {
 
     private onForecastLoaded(data: WeatherData[]): void {
         this.toggle.showContent();
-        console.log(data);
-        console.log();
 
         const dayWeatherDataList = WeatherDataHelper.groupWeatherDataByDay(data).sort((a, b) => a.date.getTime() - b.date.getTime());
+        this.dayWeatherData = dayWeatherDataList;
 
         this.dayButtons.splice(0);
+        this.currentlyActiveDayButton = null;
         this.daysNavigation.innerHTML = "";
+
         for (let dayWeatherData of dayWeatherDataList) {
-            new DayButton(dayWeatherData, this.daysNavigation, this.weatherApp, LocalizationHelper.getLocale(this.languageManager.getCurrentLanguage()));
+            const button = new DayButton(
+                dayWeatherData,
+                this.daysNavigation,
+                this.weatherApp,
+                LocalizationHelper.getLocale(this.languageManager.getCurrentLanguage())
+            );
+            button.addOnClickListener(clickedButton => this.onDayButtonClick(clickedButton));
+            this.dayButtons.push(button);
         }
+
+        if (this.dayButtons.length > 0) {
+            const firstButton = this.dayButtons[0];
+            firstButton.setAsActive();
+            this.currentlyActiveDayButton = firstButton;
+        }
+    }
+
+    private onDayButtonClick(dayButton: DayButton): void {
+        if (this.currentlyActiveDayButton === dayButton) return;
+        if (this.currentlyActiveDayButton !== null) {
+            this.currentlyActiveDayButton.setAsInactive();
+        }
+        dayButton.setAsActive();
+        this.currentlyActiveDayButton = dayButton;
+
+        const dayWeatherData = dayButton.getDayWeatherData();
+        console.log(dayWeatherData);
+
+        let previousWeatherData: WeatherData[] | null = null;
+        let nextWeatherData: WeatherData[] | null = null;
+        for (let i = 0; i < this.dayWeatherData.length; i++) {
+            if (this.dayWeatherData[i] === dayWeatherData) {
+                if (i > 0) {
+                    previousWeatherData = this.dayWeatherData[i-1].data;
+                }
+                if (i < this.dayWeatherData.length-1) {
+                    nextWeatherData = this.dayWeatherData[i+1].data;
+                }
+            }
+        }
+
+        let previousGraphLastTemperature = previousWeatherData !== null && previousWeatherData.length > 0
+        ? previousWeatherData[previousWeatherData.length-1].temperature : null;
+        let nextGraphFirstTemperature = nextWeatherData !== null && nextWeatherData.length > 0
+        ? nextWeatherData[0].temperature : null;
+        console.log(previousGraphLastTemperature);
+        this.forecastGraph.displayTemperature(dayWeatherData.data, previousGraphLastTemperature, nextGraphFirstTemperature);
     }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {

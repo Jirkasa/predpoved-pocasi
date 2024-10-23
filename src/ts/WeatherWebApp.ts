@@ -61,7 +61,9 @@ class WeatherWebApp {
             forecastPrecipitationButtonId: "ForecastPrecipitationButton",
             forecastHumidityButtonId: "ForecastHumidityButton",
             forecastWindButtonId: "ForecastWindButton",
-            daysNavigationId: "ForecastDaysNavigation"
+            daysNavigationId: "ForecastDaysNavigation",
+            graphCanvasId: "GraphCanvas",
+            graphTimelineElementId: "GraphCanvasTimeline"
         });
 
         this.languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));

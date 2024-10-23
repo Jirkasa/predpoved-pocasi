@@ -46,6 +46,8 @@ type WeatherAppUIConfig = {
     forecastHumidityButtonId: string;
     forecastWindButtonId: string;
     daysNavigationId: string;
+    graphCanvasId: string;
+    graphTimelineElementId: string;
 }
 
 class WeatherAppUI {
@@ -113,6 +115,10 @@ class WeatherAppUI {
             }
         );
 
+        const canvas = this.getElementById(config.graphCanvasId);
+        if (!(canvas instanceof HTMLCanvasElement)) {
+            throw new Error(`Element with id ${config.graphCanvasId} is not canvas element.`);
+        }
         new ForecastDisplay(
             config.weatherApp,
             config.languageManager,
@@ -124,7 +130,9 @@ class WeatherAppUI {
                 precipitationButton: this.getElementById(config.forecastPrecipitationButtonId),
                 humidityButton: this.getElementById(config.forecastHumidityButtonId),
                 windButton: this.getElementById(config.forecastWindButtonId),
-                daysNavigation: this.getElementById(config.daysNavigationId)
+                daysNavigation: this.getElementById(config.daysNavigationId),
+                graphCanvas: canvas,
+                graphTimelineElement: this.getElementById(config.graphTimelineElementId)
             }
         );
 

@@ -1,4 +1,5 @@
 import PartOfDay from "../../../core/data/PartOfDay";
+import EventSourcePoint from "../../../core/utils/EventSourcePoint";
 import WeatherDataHelper, { DayWeatherData } from "../../../core/utils/WeatherDataHelper";
 import WeatherApp from "../../../core/WeatherApp";
 import SVGIconElementCreator from "../../utils/SVGIconElementCreator";
@@ -11,12 +12,13 @@ class DayButton {
     private static readonly TEMPERATURE_CSS_CLASS = "day-button__temperature";
     private static readonly NIGHT_TEMPERATURE_CSS_CLASS = "day-button__night-temperature";
 
-    private date: Date;
+    private onClickEventSource = new EventSourcePoint<DayButton>();
+    private dayWeatherData: DayWeatherData;
     private buttonElement: HTMLButtonElement;
     private dayElement: HTMLElement;
 
     constructor(dayWeatherData: DayWeatherData, container: HTMLElement, weatherApp: WeatherApp, locale: string) {
-        this.date = dayWeatherData.date;
+        this.dayWeatherData = dayWeatherData;
 
         this.buttonElement = document.createElement("button");
         this.buttonElement.classList.add(DayButton.BUTTON_CSS_CLASS);
@@ -24,7 +26,7 @@ class DayButton {
 
         this.dayElement = document.createElement("span");
         this.dayElement.classList.add(DayButton.DAY_CSS_CLASS);
-        this.dayElement.innerText = this.date.toLocaleString(locale, { weekday: "short" });
+        this.dayElement.innerText = dayWeatherData.date.toLocaleString(locale, { weekday: "short" });
         this.buttonElement.appendChild(this.dayElement);
 
         const weatherIcon = document.createElement("div");
@@ -56,6 +58,12 @@ class DayButton {
         const nightTemperatureElement = document.createElement("span");
         nightTemperatureElement.innerText = this.createTemperatureString(averageTemperatures.nightTemperature);
         nightTemperatureContainer.appendChild(nightTemperatureElement);
+
+        this.buttonElement.addEventListener("click", () => this.onButtonClick());
+    }
+
+    public getDayWeatherData(): DayWeatherData {
+        return this.dayWeatherData;
     }
 
     public setAsActive(): void {
@@ -67,7 +75,15 @@ class DayButton {
     }
 
     public updateDayName(locale: string) {
-        this.dayElement.innerText = this.date.toLocaleString(locale, { weekday: "short" });
+        this.dayElement.innerText = this.dayWeatherData.date.toLocaleString(locale, { weekday: "short" });
+    }
+
+    public addOnClickListener(callback: (button: DayButton) => void): void {
+        this.onClickEventSource.subscribe(callback);
+    }
+
+    private onButtonClick(): void {
+        this.onClickEventSource.fire(this);
     }
 
     private createTemperatureString(temperature: number | null): string {
