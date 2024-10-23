@@ -146,6 +146,22 @@ class ForecastDisplay {
 
                 this.forecastGraph.displayFeelsLike(dayWeatherData.data, previousGraphLastFeelsLike, nextGraphFirstFeelsLike);
                 break;
+            case ForecastGraphNavigationItem.PRECIPITATION:
+                let previousGraphLastProbabilityOfPrecipitation = previousWeatherData !== null && previousWeatherData.length > 0
+                ? previousWeatherData[previousWeatherData.length-1].probabilityOfPrecipitation : null;
+                let nextGraphFirstProbabilityOfPrecipitation = nextWeatherData !== null && nextWeatherData.length > 0
+                ? nextWeatherData[0].probabilityOfPrecipitation : null;
+
+                this.forecastGraph.displayProbabilityOfPerception(dayWeatherData.data, previousGraphLastProbabilityOfPrecipitation, nextGraphFirstProbabilityOfPrecipitation);
+                break;
+            case ForecastGraphNavigationItem.HUMIDITY:
+                let previousGraphLastHumidity = previousWeatherData !== null && previousWeatherData.length > 0
+                ? previousWeatherData[previousWeatherData.length-1].humidity : null;
+                let nextGraphFirstHumidity = nextWeatherData !== null && nextWeatherData.length > 0
+                ? nextWeatherData[0].humidity : null;
+
+                this.forecastGraph.displayHumidity(dayWeatherData.data, previousGraphLastHumidity, nextGraphFirstHumidity);
+                break;
             default:
                 this.forecastGraph.displayNone();
                 break;

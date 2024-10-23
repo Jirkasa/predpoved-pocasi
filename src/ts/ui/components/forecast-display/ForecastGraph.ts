@@ -6,7 +6,9 @@ import LocalizationHelper from "../../../localization/utils/LocalizationHelper";
 enum CurrentGraphDisplayState {
     NONE,
     TEMPERATURE,
-    FEELS_LIKE
+    FEELS_LIKE,
+    PROBABILITY_OF_PERCEPTION,
+    HUMIDITY
 }
 
 type GraphColorsConfig = {
@@ -102,6 +104,52 @@ class ForecastGraph {
                 text: "#856215"
             }
         );
+    }
+
+    public displayProbabilityOfPerception(data: WeatherData[], previousGraphLastValue: number | null = null, nextGraphFirstValue: number | null = null): void {
+        this.updateCurrentState(CurrentGraphDisplayState.PROBABILITY_OF_PERCEPTION, data, previousGraphLastValue, nextGraphFirstValue);
+
+        const percentages: number[] = [];
+        for (let item of data) {
+            percentages.push(Math.round(item.probabilityOfPrecipitation * 100));
+        }
+
+        this.updateTimeline(data);
+        this.drawGraph(
+            percentages,
+            previousGraphLastValue !== null ? Math.round(previousGraphLastValue) : null,
+            nextGraphFirstValue !== null ? Math.round(nextGraphFirstValue) : null,
+            "%",
+            {
+                line: "#33A0FA",
+                lineBackground: null,
+                point: "#33A0FA",
+                text: "#155385"
+            }
+        );
+    }
+
+    public displayHumidity(data: WeatherData[], previousGraphLastValue: number | null = null, nextGraphFirstValue: number | null = null): void {
+        this.updateCurrentState(CurrentGraphDisplayState.HUMIDITY, data, previousGraphLastValue, nextGraphFirstValue);
+
+        const percentages: number[] = [];
+        for (let item of data) {
+            percentages.push(Math.round(item.humidity));
+        }
+
+        this.updateTimeline(data);
+        this.drawGraph(
+            percentages,
+            previousGraphLastValue !== null ? Math.round(previousGraphLastValue) : null,
+            nextGraphFirstValue !== null ? Math.round(nextGraphFirstValue) : null,
+            "%",
+            {
+                line: "#33A0FA",
+                lineBackground: "#D6ECFE",
+                point: "#33A0FA",
+                text: "#155385"
+            }
+        )
     }
 
     private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, valueUnit: string | null, colors: GraphColorsConfig): void {
@@ -239,6 +287,7 @@ class ForecastGraph {
     }
 
     private getScaledValue(value: number, minValue: number, maxValue: number): number {
+        if (maxValue-minValue === 0) return 0;
         return (value - minValue) / (maxValue - minValue);
     }
 
@@ -295,6 +344,15 @@ class ForecastGraph {
         switch (this.currentDisplayState) {
             case CurrentGraphDisplayState.TEMPERATURE:
                 this.displayTemperature(this.currentWeatherData, this.currentPreviousGraphLastValue, this.currentNextGraphFirstValue);
+                break;
+            case CurrentGraphDisplayState.FEELS_LIKE:
+                this.displayFeelsLike(this.currentWeatherData, this.currentPreviousGraphLastValue, this.currentNextGraphFirstValue);
+                break;
+            case CurrentGraphDisplayState.PROBABILITY_OF_PERCEPTION:
+                this.displayProbabilityOfPerception(this.currentWeatherData, this.currentPreviousGraphLastValue, this.currentNextGraphFirstValue);
+                break;
+            case CurrentGraphDisplayState.HUMIDITY:
+                this.displayHumidity(this.currentWeatherData, this.currentPreviousGraphLastValue, this.currentNextGraphFirstValue);
                 break;
         }
     }
