@@ -10,6 +10,7 @@ enum CurrentGraphDisplayState {
 
 class ForecastGraph {
     private static readonly TIMELINE_POINT_CSS_CLASS = "graph__timeline-point";
+    private static readonly GRAPH_VERTICAL_PADDING = 32;
 
     private canvas: HTMLCanvasElement;
     private timelineElement: HTMLElement;
@@ -94,30 +95,30 @@ class ForecastGraph {
     }
 
     private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null): void {
-        const lineColor = '#FABB33';
-        const pointColor = '#ffcc00';
-        const backgroundColor = '#ffebcd';
-        const textColor = '#8b4513';
-
         const stepSize = this.canvas.width / (values.length+1);
         const maxValue = this.getMaxValue(values, previousGraphLastValue, nextGraphFirstValue);
         const minValue = this.getMinValue(values, previousGraphLastValue, nextGraphFirstValue);
-        const verticalPadding = 30;
 
-        this.canvasCtx.strokeStyle = lineColor;
+        this.drawGraphLineBackground(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, "#FEF1D6");
+        this.drawGraphLine(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, "#FABB33");
+    }
+
+    private drawGraphLine(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, stepSize: number, minValue: number, maxValue: number, color: string): void {
+        this.canvasCtx.strokeStyle = color;
         this.canvasCtx.lineWidth = 2;
+
         let pathStarted = false;
         this.canvasCtx.beginPath();
         if (previousGraphLastValue !== null) {
             const scaledValue = this.getScaledValue(previousGraphLastValue, minValue, maxValue);
-            this.canvasCtx.moveTo(0, verticalPadding + (1 - scaledValue) * (this.canvas.height-verticalPadding*2));
+            this.canvasCtx.moveTo(0, ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2));
             pathStarted = true;
         }
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
             const x = (i+1) * stepSize;
             const scaledValue = this.getScaledValue(value, minValue, maxValue);
-            const y = verticalPadding + (1 - scaledValue) * (this.canvas.height-verticalPadding*2);
+            const y = ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2);
             if (pathStarted) {
                 this.canvasCtx.lineTo(x, y);
             } else {
@@ -127,9 +128,49 @@ class ForecastGraph {
         }
         if (nextGraphFirstValue !== null) {
             const scaledValue = this.getScaledValue(nextGraphFirstValue, minValue, maxValue);
-            this.canvasCtx.lineTo(this.canvas.width, verticalPadding + (1 - scaledValue) * (this.canvas.height-verticalPadding*2));
+            this.canvasCtx.lineTo(this.canvas.width, ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2));
         }
         this.canvasCtx.stroke();
+    }
+
+    private drawGraphLineBackground(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, stepSize: number, minValue: number, maxValue: number, color: string): void {
+        this.canvasCtx.fillStyle = color;
+
+        let pathStarted = false;
+        this.canvasCtx.beginPath();
+        if (previousGraphLastValue !== null) {
+            const scaledValue = this.getScaledValue(previousGraphLastValue, minValue, maxValue);
+            this.canvasCtx.moveTo(0, ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2));
+            pathStarted = true;
+        }
+        for (let i = 0; i < values.length; i++) {
+            const value = values[i];
+            const x = (i+1) * stepSize;
+            const scaledValue = this.getScaledValue(value, minValue, maxValue);
+            const y = ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2);
+            if (pathStarted) {
+                this.canvasCtx.lineTo(x, y);
+            } else {
+                pathStarted = true;
+                this.canvasCtx.moveTo(x, y);
+            }
+        }
+        if (nextGraphFirstValue !== null) {
+            const scaledValue = this.getScaledValue(nextGraphFirstValue, minValue, maxValue);
+            this.canvasCtx.lineTo(this.canvas.width, ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2));
+            this.canvasCtx.lineTo(this.canvas.width, this.canvas.height);
+        } else {
+            this.canvasCtx.lineTo(values.length * stepSize, this.canvas.height);
+        }
+
+        if (previousGraphLastValue !== null) {
+            this.canvasCtx.lineTo(0, this.canvas.height);
+        } else {
+            this.canvasCtx.lineTo(stepSize, this.canvas.height);
+        }
+
+        this.canvasCtx.closePath();
+        this.canvasCtx.fill();
     }
 
     private getScaledValue(value: number, minValue: number, maxValue: number): number {

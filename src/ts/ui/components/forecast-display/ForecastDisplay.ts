@@ -101,7 +101,6 @@ class ForecastDisplay {
         this.currentlyActiveDayButton = dayButton;
 
         const dayWeatherData = dayButton.getDayWeatherData();
-        console.log(dayWeatherData);
 
         let previousWeatherData: WeatherData[] | null = null;
         let nextWeatherData: WeatherData[] | null = null;
@@ -120,7 +119,6 @@ class ForecastDisplay {
         ? previousWeatherData[previousWeatherData.length-1].temperature : null;
         let nextGraphFirstTemperature = nextWeatherData !== null && nextWeatherData.length > 0
         ? nextWeatherData[0].temperature : null;
-        console.log(previousGraphLastTemperature);
         this.forecastGraph.displayTemperature(dayWeatherData.data, previousGraphLastTemperature, nextGraphFirstTemperature);
     }
 
