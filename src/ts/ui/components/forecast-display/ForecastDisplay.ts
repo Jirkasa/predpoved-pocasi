@@ -89,6 +89,7 @@ class ForecastDisplay {
             const firstButton = this.dayButtons[0];
             firstButton.setAsActive();
             this.currentlyActiveDayButton = firstButton;
+            this.updateGraph(firstButton.getDayWeatherData());
         }
     }
 
@@ -100,8 +101,10 @@ class ForecastDisplay {
         dayButton.setAsActive();
         this.currentlyActiveDayButton = dayButton;
 
-        const dayWeatherData = dayButton.getDayWeatherData();
+        this.updateGraph(dayButton.getDayWeatherData());
+    }
 
+    private updateGraph(dayWeatherData: DayWeatherData): void {
         let previousWeatherData: WeatherData[] | null = null;
         let nextWeatherData: WeatherData[] | null = null;
         for (let i = 0; i < this.dayWeatherData.length; i++) {

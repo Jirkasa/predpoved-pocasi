@@ -11,6 +11,8 @@ enum CurrentGraphDisplayState {
 class ForecastGraph {
     private static readonly TIMELINE_POINT_CSS_CLASS = "graph__timeline-point";
     private static readonly GRAPH_VERTICAL_PADDING = 32;
+    private static readonly GRAPH_POINT_RADIUS = 3;
+    private static readonly GRAPH_TEXT_POINT_OFFSET = 7;
 
     private canvas: HTMLCanvasElement;
     private timelineElement: HTMLElement;
@@ -43,64 +45,41 @@ class ForecastGraph {
     }
 
     public displayNone(): void {
-        this.currentDisplayState = CurrentGraphDisplayState.NONE;
-        this.currentWeatherData = null;
-        this.currentPreviousGraphLastValue = null;
-        this.currentNextGraphFirstValue = null;
+        this.updateCurrentState(CurrentGraphDisplayState.NONE, null, null, null);
 
-        this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasCtx.fillStyle = "#F2F2F3";
-        this.canvasCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawGraphBackground();
     }
 
     public displayTemperature(data: WeatherData[], previousGraphLastValue: number | null = null, nextGraphFirstValue: number | null = null): void {
-        this.currentDisplayState = CurrentGraphDisplayState.TEMPERATURE;
-        this.currentWeatherData = data; // todo - na tady to nastavování vytvořit metodu
-        this.currentPreviousGraphLastValue = null;
-        this.currentNextGraphFirstValue = null;
+        this.updateCurrentState(CurrentGraphDisplayState.TEMPERATURE, data, previousGraphLastValue, nextGraphFirstValue);
 
-        this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.canvasCtx.fillStyle = "#F2F2F3";
-        this.canvasCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        const times: string[] = []; // todo - potom tady tohle přesunout do samostatné metody
         const temperatures: number[] = [];
 
         for (let item of data) {
-            const date = WeatherDataHelper.unixTimeToDate(item.time);
-            const time = date.toLocaleTimeString(
-                LocalizationHelper.getLocale(this.languageManager.getCurrentLanguage()),
-                {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                }
-            );
-            times.push(time);
-            temperatures.push(item.temperature);
+            temperatures.push(Math.round(item.temperature));
         }
 
         this.timelineElement.innerHTML = "";
-        const percentage = 100/(times.length+1);
 
-        for (let i = 0; i < times.length; i++) {
-            const timelinePoint = document.createElement("div");
-            timelinePoint.classList.add(ForecastGraph.TIMELINE_POINT_CSS_CLASS);
-            timelinePoint.innerText = times[i];
-            timelinePoint.style.left = `${percentage*(i+1)}%`;
-            this.timelineElement.appendChild(timelinePoint);
-        }
-
-        this.drawGraph(temperatures, previousGraphLastValue, nextGraphFirstValue);
+        this.updateTimeline(data);
+        this.drawGraph(temperatures, previousGraphLastValue, nextGraphFirstValue, "°C");
     }
 
-    private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null): void {
+    private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, valueUnit: string | null = null): void {
         const stepSize = this.canvas.width / (values.length+1);
         const maxValue = this.getMaxValue(values, previousGraphLastValue, nextGraphFirstValue);
         const minValue = this.getMinValue(values, previousGraphLastValue, nextGraphFirstValue);
 
+        this.drawGraphBackground();
         this.drawGraphLineBackground(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, "#FEF1D6");
         this.drawGraphLine(values, previousGraphLastValue, nextGraphFirstValue, stepSize, minValue, maxValue, "#FABB33");
+        this.drawGraphPoints(values, stepSize, minValue, maxValue, "#FABB33", "#856215", valueUnit);
+    }
+
+    private drawGraphBackground(): void {
+        this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvasCtx.fillStyle = "#F2F2F3";
+        this.canvasCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     private drawGraphLine(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, stepSize: number, minValue: number, maxValue: number, color: string): void {
@@ -173,6 +152,51 @@ class ForecastGraph {
         this.canvasCtx.fill();
     }
 
+    private drawGraphPoints(values: number[], stepSize: number, minValue: number, maxValue: number, color: string, textColor: string, valueUnit: string | null = null): void {
+        for (let i = 0; i < values.length; i++) {
+            const value = values[i];
+            const x = (i+1) * stepSize;
+            const scaledValue = this.getScaledValue(value, minValue, maxValue);
+            const y = ForecastGraph.GRAPH_VERTICAL_PADDING + (1 - scaledValue) * (this.canvas.height-ForecastGraph.GRAPH_VERTICAL_PADDING*2);
+            
+            this.canvasCtx.fillStyle = color;
+            this.canvasCtx.beginPath();
+            this.canvasCtx.arc(x, y, ForecastGraph.GRAPH_POINT_RADIUS, 0, ForecastGraph.GRAPH_POINT_RADIUS/2 * Math.PI);
+            this.canvasCtx.fill();
+
+            this.canvasCtx.fillStyle = textColor;
+            this.canvasCtx.fillText(`${value}${valueUnit || ""}`, x, y-ForecastGraph.GRAPH_TEXT_POINT_OFFSET);
+        }
+    }
+
+    private updateTimeline(data: WeatherData[]): void {
+        const times: string[] = [];
+
+        for (let item of data) {
+            const date = WeatherDataHelper.unixTimeToDate(item.time);
+            const time = date.toLocaleTimeString(
+                LocalizationHelper.getLocale(this.languageManager.getCurrentLanguage()),
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                }
+            );
+            times.push(time);
+        }
+
+        this.timelineElement.innerHTML = "";
+        const percentage = 100/(times.length+1);
+
+        for (let i = 0; i < times.length; i++) {
+            const timelinePoint = document.createElement("div");
+            timelinePoint.classList.add(ForecastGraph.TIMELINE_POINT_CSS_CLASS);
+            timelinePoint.innerText = times[i];
+            timelinePoint.style.left = `${percentage*(i+1)}%`;
+            this.timelineElement.appendChild(timelinePoint);
+        }
+    }
+
     private getScaledValue(value: number, minValue: number, maxValue: number): number {
         return (value - minValue) / (maxValue - minValue);
     }
@@ -199,6 +223,13 @@ class ForecastGraph {
         return Math.min(...valuesList);
     }
 
+    private updateCurrentState(displayState: CurrentGraphDisplayState, weatherData: WeatherData[] | null, previousGraphLastValue: number | null, nextGraphFirstValue: number | null): void {
+        this.currentDisplayState = displayState;
+        this.currentWeatherData = weatherData;
+        this.currentPreviousGraphLastValue = previousGraphLastValue;
+        this.currentNextGraphFirstValue = nextGraphFirstValue;
+    }
+
     private onLanguageChange(): void {
         this.rerender();
     }
@@ -209,6 +240,7 @@ class ForecastGraph {
 
         this.canvasCtx.font = "12px Ubuntu";
         this.canvasCtx.textAlign = "center";
+        this.canvasCtx.textBaseline = 'bottom';
 
         this.rerender();
     }
