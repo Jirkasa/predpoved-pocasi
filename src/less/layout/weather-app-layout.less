@@ -5,9 +5,17 @@
 
     width: 100%;
 
+    @media (max-width: #pxToEm(850)[]) {
+        flex-direction: column;
+    }
+
     &__current-weather-side {
         flex: 2 0;
         max-width: 30rem;
+
+        @media (max-width: #pxToEm(850)[]) {
+            max-width: none;
+        }
     }
 
     &__forecast-side {
