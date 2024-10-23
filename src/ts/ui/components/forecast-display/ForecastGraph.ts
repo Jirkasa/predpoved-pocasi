@@ -8,7 +8,8 @@ enum CurrentGraphDisplayState {
     TEMPERATURE,
     FEELS_LIKE,
     PROBABILITY_OF_PERCEPTION,
-    HUMIDITY
+    HUMIDITY,
+    WIND_SPEED
 }
 
 type GraphColorsConfig = {
@@ -149,7 +150,30 @@ class ForecastGraph {
                 point: "#33A0FA",
                 text: "#155385"
             }
-        )
+        );
+    }
+
+    public displayWindSpeed(data: WeatherData[], previousGraphLastValue: number | null = null, nextGraphFirstValue: number | null = null): void {
+        this.updateCurrentState(CurrentGraphDisplayState.WIND_SPEED, data, previousGraphLastValue, nextGraphFirstValue);
+
+        const windSpeedValues: number[] = [];
+        for (let item of data) {
+            windSpeedValues.push(item.windSpeed);
+        }
+
+        this.updateTimeline(data);
+        this.drawGraph(
+            windSpeedValues,
+            previousGraphLastValue !== null ? Math.round(previousGraphLastValue) : null,
+            nextGraphFirstValue !== null ? Math.round(nextGraphFirstValue) : null,
+            " km/h",
+            {
+                line: "#5CB3FB",
+                lineBackground: "#EBF5FE",
+                point: "#5CB3FB",
+                text: "#155385"
+            }
+        );
     }
 
     private drawGraph(values: number[], previousGraphLastValue: number | null, nextGraphFirstValue: number | null, valueUnit: string | null, colors: GraphColorsConfig): void {
@@ -353,6 +377,9 @@ class ForecastGraph {
                 break;
             case CurrentGraphDisplayState.HUMIDITY:
                 this.displayHumidity(this.currentWeatherData, this.currentPreviousGraphLastValue, this.currentNextGraphFirstValue);
+                break;
+            case CurrentGraphDisplayState.WIND_SPEED:
+                this.displayWindSpeed(this.currentWeatherData, this.currentPreviousGraphLastValue, this.currentNextGraphFirstValue);
                 break;
         }
     }

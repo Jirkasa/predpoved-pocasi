@@ -162,6 +162,14 @@ class ForecastDisplay {
 
                 this.forecastGraph.displayHumidity(dayWeatherData.data, previousGraphLastHumidity, nextGraphFirstHumidity);
                 break;
+            case ForecastGraphNavigationItem.WIND:
+                let previousGraphLastWindSpeed = previousWeatherData !== null && previousWeatherData.length > 0
+                ? previousWeatherData[previousWeatherData.length-1].windSpeed : null;
+                let nextGraphFirstWindSpeed = nextWeatherData !== null && nextWeatherData.length > 0
+                ? nextWeatherData[0].windSpeed : null;
+
+                this.forecastGraph.displayWindSpeed(dayWeatherData.data, previousGraphLastWindSpeed, nextGraphFirstWindSpeed);
+                break;
             default:
                 this.forecastGraph.displayNone();
                 break;
