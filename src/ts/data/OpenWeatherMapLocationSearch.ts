@@ -2,8 +2,8 @@ import LocationData from "../core/data/LocationData";
 import LocationSearch from "../core/data/LocationSearch";
 
 class OpenWeatherMapLocationSearch implements LocationSearch {
-    private static readonly SEARCH_ENDPOINT = "http://api.openweathermap.org/geo/1.0/direct";
-    private static readonly SEARCH_BY_COORDINATES_ENDPOINT = "http://api.openweathermap.org/geo/1.0/reverse";
+    private static readonly SEARCH_ENDPOINT = "https://api.openweathermap.org/geo/1.0/direct";
+    private static readonly SEARCH_BY_COORDINATES_ENDPOINT = "https://api.openweathermap.org/geo/1.0/reverse";
     private static readonly LOCATIONS_LIMIT = 5;
 
     private appId : string;

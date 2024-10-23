@@ -152,11 +152,12 @@ class WeatherAppUI {
         );
 
         config.languageManager.addOnLanguageChangeListener(() => this.onLanguageChange());
-        config.weatherApp.addOnCurrentWeatherLoadingErrorListener(() => this.onWeatherLoadingError());
-        config.weatherApp.addOnForecastWeatherLoadingErrorListener(() => this.onWeatherLoadingError());
+        config.weatherApp.addOnCurrentWeatherLoadingErrorListener(() => this.onDataLoadingError());
+        config.weatherApp.addOnForecastWeatherLoadingErrorListener(() => this.onDataLoadingError());
+        config.weatherApp.addOnLocationSearchLoadingErrorListener(() => this.onDataLoadingError());
     }
 
-    private onWeatherLoadingError(): void {
+    private onDataLoadingError(): void {
         this.pagesToggle.showErrorPage();
     }
 
