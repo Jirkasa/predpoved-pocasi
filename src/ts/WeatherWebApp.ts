@@ -29,6 +29,8 @@ class WeatherWebApp {
             weatherApp: this.weatherApp,
             languageManager: this.languageManager,
             loadingPageId: "LoadingPage",
+            errorPageId: "ErrorPage",
+            errorPageMessageId: "ErrorPageMessage",
             weatherAppPageId: "WeatherAppPage",
             languageSelectButtonId: "LanguageSelectButton",
             languageSelectButtonFlagImageId: "LanguageSelectButtonFlagImage",
@@ -109,5 +111,3 @@ class WeatherWebApp {
 }
 
 export default WeatherWebApp;
-
-// todo - ještě přidat nějakou obecnou stránku pro error

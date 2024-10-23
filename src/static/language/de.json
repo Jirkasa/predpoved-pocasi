@@ -8,5 +8,6 @@
     "precipitation": "Niederschlag",
     "searchForLocation": "Ort suchen",
     "noResultsForLocationSearch": "Für den eingegebenen Text wurde kein Ort gefunden.",
-    "locationSearchError": "Beim Laden der Orte ist leider ein Fehler aufgetreten."
+    "locationSearchError": "Beim Laden der Orte ist leider ein Fehler aufgetreten.",
+    "generalError": "Etwas ist schief gelaufen."
 }

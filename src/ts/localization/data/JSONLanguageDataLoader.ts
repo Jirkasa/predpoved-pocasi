@@ -32,7 +32,7 @@ class JSONLanguageDataLoader implements LanguageDataLoader {
 
         const json = await response.json();
         
-        const languageData : LocalizedData = json; // todo - kdyžtak to ještě zvalidovat, ale asi to není potřeba
+        const languageData : LocalizedData = json;
         return languageData;
     }
 }

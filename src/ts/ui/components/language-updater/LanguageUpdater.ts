@@ -8,6 +8,7 @@ export type LanguageUpdaterElements = {
     currentWeatherFeelsLikeLabel: HTMLElement;
     currentWeatherHumidityLabel: HTMLElement;
     currentWeatherWindLabel: HTMLElement;
+    errorPageMessage: HTMLElement;
 }
 
 class LanguageUpdater {
@@ -16,6 +17,7 @@ class LanguageUpdater {
     private currentWeatherFeelsLikeLabel: HTMLElement;
     private currentWeatherHumidityLabel: HTMLElement;
     private currentWeatherWindLabel: HTMLElement;
+    private errorPageMessage: HTMLElement;
 
     constructor(languageManager: LanguageManager, elements: LanguageUpdaterElements) {
         this.currentWeatherHeading = elements.currentWeatherHeading;
@@ -23,6 +25,7 @@ class LanguageUpdater {
         this.currentWeatherFeelsLikeLabel = elements.currentWeatherFeelsLikeLabel;
         this.currentWeatherHumidityLabel = elements.currentWeatherHumidityLabel;
         this.currentWeatherWindLabel = elements.currentWeatherWindLabel;
+        this.errorPageMessage = elements.errorPageMessage;
 
         languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
     }
@@ -35,6 +38,7 @@ class LanguageUpdater {
         this.currentWeatherFeelsLikeLabel.innerText = localizedData.feelsLike;
         this.currentWeatherHumidityLabel.innerText = localizedData.humidity;
         this.currentWeatherWindLabel.innerText = localizedData.wind;
+        this.errorPageMessage.innerText = localizedData.generalError;
     }
 }
 

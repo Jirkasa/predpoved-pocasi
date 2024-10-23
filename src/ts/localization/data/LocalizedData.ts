@@ -9,6 +9,7 @@ type LocalizedData = {
     searchForLocation: string;
     noResultsForLocationSearch: string;
     locationSearchError: string;
+    generalError: string;
 }
 
 export default LocalizedData;

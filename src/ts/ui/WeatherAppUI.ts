@@ -13,6 +13,8 @@ type WeatherAppUIConfig = {
     weatherApp: WeatherApp;
     languageManager: LanguageManager;
     loadingPageId: string;
+    errorPageId: string;
+    errorPageMessageId: string;
     weatherAppPageId: string;
     languageSelectButtonId: string;
     languageSelectButtonFlagImageId: string;
@@ -59,7 +61,8 @@ class WeatherAppUI {
 
         this.pagesToggle = new PagesToggle(
             this.getElementById(config.loadingPageId),
-            this.getElementById(config.weatherAppPageId)
+            this.getElementById(config.weatherAppPageId),
+            this.getElementById(config.errorPageId)
         );
 
         new LocationNameDisplay(
@@ -143,11 +146,18 @@ class WeatherAppUI {
                 forecastHeading: this.getElementById(config.forecastHeadingId),
                 currentWeatherFeelsLikeLabel: this.getElementById(config.currentWeatherFeelsLikeLabelId),
                 currentWeatherHumidityLabel: this.getElementById(config.currentWeatherHumidityLabelId),
-                currentWeatherWindLabel: this.getElementById(config.currentWeatherWindLabelId)
+                currentWeatherWindLabel: this.getElementById(config.currentWeatherWindLabelId),
+                errorPageMessage: this.getElementById(config.errorPageMessageId)
             }
         );
 
         config.languageManager.addOnLanguageChangeListener(() => this.onLanguageChange());
+        config.weatherApp.addOnCurrentWeatherLoadingErrorListener(() => this.onWeatherLoadingError());
+        config.weatherApp.addOnForecastWeatherLoadingErrorListener(() => this.onWeatherLoadingError());
+    }
+
+    private onWeatherLoadingError(): void {
+        this.pagesToggle.showErrorPage();
     }
 
     private onLanguageChange(): void {
