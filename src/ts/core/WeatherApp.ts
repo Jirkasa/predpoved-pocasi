@@ -40,6 +40,11 @@ class WeatherApp {
         return this.currentLocation.name;
     }
 
+    public getCurrentLocationCoordinates(): [number, number] | null {
+        if (!this.currentLocation) return null;
+        return [this.currentLocation.latitude, this.currentLocation.longitude];
+    }
+
     public setLocation(location: LocationData): void {
         if (location === this.currentLocation) return;
         this.currentWeatherLoadingManager.setCoordinates(location.latitude, location.longitude);

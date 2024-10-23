@@ -10,13 +10,17 @@ import WeatherAppUI from "./ui/WeatherAppUI";
 
 class WeatherWebApp {
     private static readonly OPEN_WEATHER_MAP_APP_ID = "610f182df978d44c879ed39ce0f7f9a9";
+    private static readonly LOCAL_STORAGE_COORDINATES_FIELD = "WEATHER_WEB_APP_COORDINATES";
 
     private weatherApp: WeatherApp;
     private languageManager: LanguageManager;
 
     constructor() {
         const language = this.getDefaultLanguage();
-        const coordinates = this.getDefaultCoordinatesByLanguage(language);
+        let coordinates = this.getCoordinatesFromLocalStorage();
+        if (coordinates === null) {
+            coordinates = this.getDefaultCoordinatesByLanguage(language);
+        }
 
         const weatherDataLoader = new OpenWeatherMapDataLoader(WeatherWebApp.OPEN_WEATHER_MAP_APP_ID);
         const locationSearch = new OpenWeatherMapLocationSearch(WeatherWebApp.OPEN_WEATHER_MAP_APP_ID);
@@ -73,6 +77,13 @@ class WeatherWebApp {
         this.languageManager.changeLanguage(language);
         this.weatherApp.loadCurrentWeather();
         this.weatherApp.loadForecastWeather();
+        this.weatherApp.addOnLocationChangeListener(() => this.onLocationChange());
+    }
+
+    private onLocationChange(): void {
+        const coordinates = this.weatherApp.getCurrentLocationCoordinates();
+        if (coordinates === null) return;
+        localStorage.setItem(WeatherWebApp.LOCAL_STORAGE_COORDINATES_FIELD, JSON.stringify(coordinates));
     }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {
@@ -80,6 +91,20 @@ class WeatherWebApp {
         this.weatherApp.setLanguage(language);
         this.weatherApp.loadCurrentWeather();
         this.weatherApp.loadForecastWeather();
+    }
+
+    private getCoordinatesFromLocalStorage(): [number, number] | null {
+        const jsonArray = localStorage.getItem(WeatherWebApp.LOCAL_STORAGE_COORDINATES_FIELD);
+        if (jsonArray === null) return null;
+        try {
+            const coordinates = JSON.parse(jsonArray);
+            if (!(coordinates instanceof Array)) return null;
+            if (typeof coordinates[0] !== "number") return null;
+            if (typeof coordinates[1] !== "number") return null;
+            return [coordinates[0], coordinates[1]];
+        } catch {
+            return null;
+        }
     }
 
     private getDefaultCoordinatesByLanguage(language: AppLanguage): [number, number] {
