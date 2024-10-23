@@ -7,6 +7,7 @@ import LocalizationHelper from "../../../localization/utils/LocalizationHelper";
 import DayButton from "./DayButton";
 import ForecastDisplayToggle from "./ForecastDisplayToggle";
 import ForecastGraph from "./ForecastGraph";
+import ForecastGraphNavigation, { ForecastGraphNavigationItem } from "./ForecastGraphNavigation";
 
 export type ForecastDisplayElementsConfig = {
     loadingIcon: HTMLElement;
@@ -23,12 +24,9 @@ export type ForecastDisplayElementsConfig = {
 
 class ForecastDisplay {
     private toggle: ForecastDisplayToggle;
-    private temperatureButton: HTMLElement;
-    private feelsLikeButton: HTMLElement;
-    private precipitationButton: HTMLElement;
-    private humidityButton: HTMLElement;
-    private windButton: HTMLElement;
+    
     private daysNavigation: HTMLElement;
+    private forecastGraphNavigation: ForecastGraphNavigation;
     private forecastGraph: ForecastGraph;
 
     private weatherApp: WeatherApp;
@@ -40,12 +38,17 @@ class ForecastDisplay {
 
     constructor(weatherApp: WeatherApp, languageManager: LanguageManager, elements: ForecastDisplayElementsConfig) {
         this.toggle = new ForecastDisplayToggle(elements.loadingIcon, elements.contentContainer);
-        this.temperatureButton = elements.temperatureButton; // todo - tady ty tlačítka navigace vypreparovat do samostatné komponenty (asi jako GraphNavigation)
-        this.feelsLikeButton = elements.feelsLikeButton;
-        this.precipitationButton = elements.precipitationButton;
-        this.humidityButton = elements.humidityButton;
-        this.windButton = elements.windButton;
         this.daysNavigation = elements.daysNavigation;
+        this.forecastGraphNavigation = new ForecastGraphNavigation(
+            languageManager,
+            {
+                temperatureButton: elements.temperatureButton,
+                feelsLikeButton: elements.feelsLikeButton,
+                precipitationButton: elements.precipitationButton,
+                humidityButton: elements.humidityButton,
+                windButton: elements.windButton
+            }
+        )
         this.forecastGraph = new ForecastGraph(
             elements.graphCanvas,
             elements.graphTimelineElement,
@@ -55,6 +58,7 @@ class ForecastDisplay {
         this.weatherApp = weatherApp;
         this.languageManager = languageManager;
 
+        this.forecastGraphNavigation.addOnActiveItemChangeListener(itemType => this.onGraphNavigationActiveItemChange(itemType));
         weatherApp.addOnForecastWeatherLoadingStartedListener(() => this.onForecastLoadingStarted());
         weatherApp.addOnForecastWeatherLoadedListener(data => this.onForecastLoaded(data));
         languageManager.addOnLanguageChangeListener(languageInfo => this.onLanguageChange(languageInfo));
@@ -93,6 +97,11 @@ class ForecastDisplay {
         }
     }
 
+    private onGraphNavigationActiveItemChange(itemType: ForecastGraphNavigationItem): void {
+        if (this.currentlyActiveDayButton === null) return;
+        this.updateGraph(this.currentlyActiveDayButton.getDayWeatherData());
+    }
+
     private onDayButtonClick(dayButton: DayButton): void {
         if (this.currentlyActiveDayButton === dayButton) return;
         if (this.currentlyActiveDayButton !== null) {
@@ -118,20 +127,24 @@ class ForecastDisplay {
             }
         }
 
-        let previousGraphLastTemperature = previousWeatherData !== null && previousWeatherData.length > 0
-        ? previousWeatherData[previousWeatherData.length-1].temperature : null;
-        let nextGraphFirstTemperature = nextWeatherData !== null && nextWeatherData.length > 0
-        ? nextWeatherData[0].temperature : null;
-        this.forecastGraph.displayTemperature(dayWeatherData.data, previousGraphLastTemperature, nextGraphFirstTemperature);
+        const graphNavigationActiveItem = this.forecastGraphNavigation.getActiveItem();
+
+        switch (graphNavigationActiveItem) {
+            case ForecastGraphNavigationItem.TEMPERATURE:
+                let previousGraphLastTemperature = previousWeatherData !== null && previousWeatherData.length > 0
+                ? previousWeatherData[previousWeatherData.length-1].temperature : null;
+                let nextGraphFirstTemperature = nextWeatherData !== null && nextWeatherData.length > 0
+                ? nextWeatherData[0].temperature : null;
+                
+                this.forecastGraph.displayTemperature(dayWeatherData.data, previousGraphLastTemperature, nextGraphFirstTemperature);
+                break;
+            default:
+                this.forecastGraph.displayNone();
+                break;
+        }
     }
 
     private onLanguageChange(languageInfo: LanguageInfo): void {
-        this.temperatureButton.innerText = languageInfo.localizedData.temperature;
-        this.feelsLikeButton.innerText = languageInfo.localizedData.feelsLike;
-        this.precipitationButton.innerText = languageInfo.localizedData.precipitation;
-        this.humidityButton.innerText = languageInfo.localizedData.humidity;
-        this.windButton.innerText = languageInfo.localizedData.wind;
-
         let locale = LocalizationHelper.getLocale(languageInfo.language);
         for (let dayButton of this.dayButtons) {
             dayButton.updateDayName(locale);
